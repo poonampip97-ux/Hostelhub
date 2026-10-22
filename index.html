@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HostelHub - Hostel Management</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%A0%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#f5f6fa;--card:#fff;--tx:#1d2433;--mu:#6b7385;--pr:#4f46e5;--pr2:#eef0ff;--bd:#e3e6ee;--ok:#16a34a;--bad:#dc2626;--warn:#d97706;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1220;--card:#181c2e;--tx:#e8eaf3;--mu:#98a0b8;--pr:#818cf8;--pr2:#252a47;--bd:#2a3050;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1220;--card:#181c2e;--tx:#e8eaf3;--mu:#98a0b8;--pr:#818cf8;--pr2:#252a47;--bd:#2a3050;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+header{display:flex;gap:10px;align-items:center;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--bd);flex-wrap:wrap}header span{color:var(--mu);margin-left:auto;font-size:13px}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;max-width:900px;margin:auto}nav a{padding:7px 13px;border-radius:99px;background:var(--card);border:1px solid var(--bd);white-space:nowrap;cursor:pointer;font-size:14px}nav a.on{background:var(--pr);color:#fff;border-color:var(--pr)}
+main{max-width:900px;margin:auto;padding:0 16px 24px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:12px}
+h2{margin:0 0 10px;font-size:17px}.mu{color:var(--mu);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+input,select,textarea,button{font:inherit;padding:9px 11px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);max-width:100%}
+input,select,textarea{width:100%;margin:4px 0 10px}
+button{background:var(--pr);color:#fff;border:0;cursor:pointer}button.g{background:var(--pr2);color:var(--pr)}button.d{background:transparent;color:var(--bad);border:1px solid var(--bd)}button.s{padding:5px 10px;font-size:13px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:9px 0;border-top:1px solid var(--bd)}.row>.f{flex:1;min-width:140px}
+.row input,.row select{width:auto;margin:0}.row input[type=number]{width:90px}
+.b{padding:2px 9px;border-radius:99px;font-size:12px;background:var(--pr2);color:var(--pr);white-space:nowrap}.b.ok{background:#dcfce7;color:var(--ok)}.b.bad{background:#fee2e2;color:var(--bad)}.b.w{background:#fef3c7;color:var(--warn)}
+.bar{height:8px;background:var(--pr2);border-radius:9px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--pr)}
+.login{max-width:380px;margin:6vh auto;padding:0 16px}.big{font-size:26px;font-weight:700}
+#t{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#111;color:#fff;padding:9px 16px;border-radius:99px;display:none;z-index:9;font-size:14px;max-width:90%}
+a.l{color:var(--pr);cursor:pointer}.pre{white-space:pre-wrap}.dbt{border-collapse:collapse;font-size:13px;min-width:100%}.dbt th{background:var(--pr2);color:var(--pr);position:sticky;top:0;z-index:2}.dbt td,.dbt th{padding:7px 11px;border-bottom:1px solid var(--bd);white-space:nowrap;text-align:left}.dbt tr:nth-child(even) td{background:var(--bg)}.dbt td:first-child{background:var(--card);position:sticky;left:0}.dbt th:first-child{left:0;z-index:3}.dbj{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px;font:12px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap;word-break:break-word;margin:0 0 8px}.chip{cursor:pointer;padding:12px 14px!important;margin:0!important}.chip.on{border-color:var(--pr);background:var(--pr2)}
+</style>
+</head>
+<body>
+<div id="app"><div class="login"><p class="mu">Loading HostelHub… If this message stays, your browser could not run the page. Open it in Chrome, Edge or Safari.</p></div></div>
+<noscript><p style="padding:16px">HostelHub needs JavaScript. Please turn it on in your browser.</p></noscript>
+<div id="t"></div>
+<div style="text-align:center;font:11px system-ui,sans-serif;color:#9aa1b5;padding:14px 0 22px">HostelHub build 3</div>
+<script>
+/* If anything goes wrong, show it on the page instead of failing silently */
+window.addEventListener('error', function (e) {
+  var b = document.getElementById('errbox');
+  if (!b) { b = document.createElement('div'); b.id = 'errbox'; b.style.cssText = 'position:fixed;left:8px;right:8px;top:8px;z-index:99;background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;border-radius:10px;padding:10px 12px;font:13px/1.4 system-ui,sans-serif'; document.body.appendChild(b); }
+  b.textContent = 'Something went wrong: ' + (e.message || 'unknown error') + '. Please open this page in Chrome, Edge or Safari.';
+});
+</script>
+<script>/* Small helpers so older phones and in-app browsers can run the page */
+if (!Object.fromEntries) Object.fromEntries = function (it) { var o = {}; for (var e of it) o[e[0]] = e[1]; return o; };
+if (!Object.entries) Object.entries = function (o) { return Object.keys(o).map(function (k) { return [k, o[k]]; }); };
+if (!Array.prototype.includes) Array.prototype.includes = function (x) { return this.indexOf(x) !== -1; };
+if (!Array.prototype.flatMap) Array.prototype.flatMap = function (f, t) { return Array.prototype.concat.apply([], this.map(f, t)); };
+if (!String.prototype.padStart) String.prototype.padStart = function (n, s) { var t = String(this); s = s === undefined ? ' ' : String(s); while (t.length < n) t = s + t; return t; };
+var __defProp = Object.defineProperty;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+const SEED = { "att": { "2026-10-08_106": { "date": "2026-10-08", "sid": "106", "status": "P" }, "2026-10-08_S101": { "date": "2026-10-08", "sid": "S101", "status": "P" }, "2026-10-08_S102": { "date": "2026-10-08", "sid": "S102", "status": "P" }, "2026-10-08_S103": { "date": "2026-10-08", "sid": "S103", "status": "P" }, "2026-10-08_S104": { "date": "2026-10-08", "sid": "S104", "status": "P" }, "2026-10-08_S105": { "date": "2026-10-08", "sid": "S105", "status": "P" }, "2026-10-08_S106": { "date": "2026-10-08", "sid": "S106", "status": "P" }, "2026-10-08_S107": { "date": "2026-10-08", "sid": "S107", "status": "P" }, "2026-10-08_S108": { "date": "2026-10-08", "sid": "S108", "status": "P" }, "2026-10-08_S109": { "date": "2026-10-08", "sid": "S109", "status": "P" }, "2026-10-08_S110": { "date": "2026-10-08", "sid": "S110", "status": "P" }, "2026-10-08_S111": { "date": "2026-10-08", "sid": "S111", "status": "P" }, "2026-10-08_S112": { "date": "2026-10-08", "sid": "S112", "status": "P" }, "2026-10-08_S113": { "date": "2026-10-08", "sid": "S113", "status": "P" }, "2026-10-09_S101": { "date": "2026-10-09", "sid": "S101", "status": "P" }, "2026-10-09_S102": { "date": "2026-10-09", "sid": "S102", "status": "P" }, "2026-10-09_S103": { "date": "2026-10-09", "sid": "S103", "status": "P" }, "2026-10-09_S104": { "date": "2026-10-09", "sid": "S104", "status": "P" }, "2026-10-09_S105": { "date": "2026-10-09", "sid": "S105", "status": "P" }, "2026-10-09_S106": { "date": "2026-10-09", "sid": "S106", "status": "P" }, "2026-10-10_S101": { "date": "2026-10-10", "sid": "S101", "status": "P" }, "2026-10-10_S102": { "date": "2026-10-10", "sid": "S102", "status": "A" }, "2026-10-10_S103": { "date": "2026-10-10", "sid": "S103", "status": "P" }, "2026-10-10_S104": { "date": "2026-10-10", "sid": "S104", "status": "P" }, "2026-10-10_S105": { "date": "2026-10-10", "sid": "S105", "status": "P" }, "2026-10-10_S106": { "date": "2026-10-10", "sid": "S106", "status": "P" }, "2026-10-11_S101": { "date": "2026-10-11", "sid": "S101", "status": "P" }, "2026-10-11_S102": { "date": "2026-10-11", "sid": "S102", "status": "P" }, "2026-10-11_S103": { "date": "2026-10-11", "sid": "S103", "status": "P" }, "2026-10-11_S104": { "date": "2026-10-11", "sid": "S104", "status": "P" }, "2026-10-11_S105": { "date": "2026-10-11", "sid": "S105", "status": "A" }, "2026-10-11_S106": { "date": "2026-10-11", "sid": "S106", "status": "P" }, "2026-10-12_106": { "date": "2026-10-12", "sid": "106", "status": "P" }, "2026-10-12_S101": { "date": "2026-10-12", "sid": "S101", "status": "P" }, "2026-10-12_S102": { "date": "2026-10-12", "sid": "S102", "status": "P" }, "2026-10-12_S103": { "date": "2026-10-12", "sid": "S103", "status": "A" }, "2026-10-12_S104": { "date": "2026-10-12", "sid": "S104", "status": "P" }, "2026-10-12_S105": { "date": "2026-10-12", "sid": "S105", "status": "P" }, "2026-10-12_S106": { "date": "2026-10-12", "sid": "S106", "status": "P" }, "2026-10-13_106": { "date": "2026-10-13", "sid": "106", "status": "P" }, "2026-10-13_S101": { "date": "2026-10-13", "sid": "S101", "status": "P" }, "2026-10-13_S102": { "date": "2026-10-13", "sid": "S102", "status": "P" }, "2026-10-13_S103": { "date": "2026-10-13", "sid": "S103", "status": "P" }, "2026-10-13_S104": { "date": "2026-10-13", "sid": "S104", "status": "P" }, "2026-10-13_S105": { "date": "2026-10-13", "sid": "S105", "status": "A" }, "2026-10-13_S106": { "date": "2026-10-13", "sid": "S106", "status": "P" }, "2026-10-14_106": { "date": "2026-10-14", "sid": "106", "status": "A" }, "2026-10-14_S101": { "date": "2026-10-14", "sid": "S101", "status": "P" }, "2026-10-14_S102": { "date": "2026-10-14", "sid": "S102", "status": "A" }, "2026-10-14_S103": { "date": "2026-10-14", "sid": "S103", "status": "P" }, "2026-10-14_S104": { "date": "2026-10-14", "sid": "S104", "status": "P" }, "2026-10-14_S105": { "date": "2026-10-14", "sid": "S105", "status": "P" }, "2026-10-14_S106": { "date": "2026-10-14", "sid": "S106", "status": "P" }, "2026-10-15_106": { "date": "2026-10-15", "sid": "106", "status": "P" }, "2026-10-15_S101": { "date": "2026-10-15", "sid": "S101", "status": "P" }, "2026-10-15_S102": { "date": "2026-10-15", "sid": "S102", "status": "P" }, "2026-10-15_S103": { "date": "2026-10-15", "sid": "S103", "status": "A" }, "2026-10-15_S104": { "date": "2026-10-15", "sid": "S104", "status": "P" }, "2026-10-15_S105": { "date": "2026-10-15", "sid": "S105", "status": "P" }, "2026-10-15_S106": { "date": "2026-10-15", "sid": "S106", "status": "P" }, "2026-10-15_S109": { "date": "2026-10-15", "sid": "S109", "status": "P" }, "2026-10-15_S110": { "date": "2026-10-15", "sid": "S110", "status": "P" }, "2026-10-15_S111": { "date": "2026-10-15", "sid": "S111", "status": "P" }, "2026-10-15_S112": { "date": "2026-10-15", "sid": "S112", "status": "P" }, "2026-10-15_S113": { "date": "2026-10-15", "sid": "S113", "status": "P" }, "2026-10-16_106": { "date": "2026-10-16", "sid": "106", "status": "P" }, "2026-10-16_S101": { "date": "2026-10-16", "sid": "S101", "status": "P" }, "2026-10-16_S102": { "date": "2026-10-16", "sid": "S102", "status": "P" }, "2026-10-16_S103": { "date": "2026-10-16", "sid": "S103", "status": "P" }, "2026-10-16_S104": { "date": "2026-10-16", "sid": "S104", "status": "P" }, "2026-10-16_S105": { "date": "2026-10-16", "sid": "S105", "status": "P" }, "2026-10-16_S106": { "date": "2026-10-16", "sid": "S106", "status": "A" }, "2026-10-16_S109": { "date": "2026-10-16", "sid": "S109", "status": "P" }, "2026-10-16_S110": { "date": "2026-10-16", "sid": "S110", "status": "A" }, "2026-10-16_S111": { "date": "2026-10-16", "sid": "S111", "status": "P" }, "2026-10-16_S112": { "date": "2026-10-16", "sid": "S112", "status": "P" }, "2026-10-16_S113": { "date": "2026-10-16", "sid": "S113", "status": "P" }, "2026-10-17_106": { "date": "2026-10-17", "sid": "106", "status": "A" }, "2026-10-17_S101": { "date": "2026-10-17", "sid": "S101", "status": "P" }, "2026-10-17_S102": { "date": "2026-10-17", "sid": "S102", "status": "P" }, "2026-10-17_S103": { "date": "2026-10-17", "sid": "S103", "status": "P" }, "2026-10-17_S104": { "date": "2026-10-17", "sid": "S104", "status": "P" }, "2026-10-17_S105": { "date": "2026-10-17", "sid": "S105", "status": "P" }, "2026-10-17_S106": { "date": "2026-10-17", "sid": "S106", "status": "P" }, "2026-10-17_S107": { "date": "2026-10-17", "sid": "S107", "status": "P" }, "2026-10-17_S108": { "date": "2026-10-17", "sid": "S108", "status": "P" }, "2026-10-17_S109": { "date": "2026-10-17", "sid": "S109", "status": "P" }, "2026-10-17_S110": { "date": "2026-10-17", "sid": "S110", "status": "P" }, "2026-10-17_S111": { "date": "2026-10-17", "sid": "S111", "status": "P" }, "2026-10-17_S112": { "date": "2026-10-17", "sid": "S112", "status": "P" }, "2026-10-17_S113": { "date": "2026-10-17", "sid": "S113", "status": "P" } }, "complaints": { "c1": { "cat": "Electricity / Water", "name": "Aarav Sharma", "reply": "Electrician will visit tomorrow.", "room": "101", "sid": "S101", "status": "In Progress", "text": "Ceiling fan makes a loud noise at night.", "ts": 176085e7 }, "c10": { "cat": "Food / Mess", "name": "Aditya Rao", "reply": "Menu review is scheduled with the mess committee.", "room": "103", "sid": "S105", "status": "In Progress", "text": "Mess serves very few vegetables at dinner.", "ts": 179203e7 }, "c11": { "cat": "Maintenance", "name": "Dev Malhotra", "room": "202", "sid": "S110", "status": "Open", "text": "Wardrobe door hinge is loose.", "ts": 17921e8 }, "c12": { "cat": "Other", "name": "Arjun Reddy", "room": "302", "sid": "S113", "status": "Open", "text": "Request for an extra study lamp.", "ts": 179211e7 }, "c13": { "cat": "Maintenance", "handledAt": 179193e7, "handledBy": "Warden", "name": "Vikram Singh", "reply": "Lock has been replaced.", "room": "103", "sid": "S104", "status": "Resolved", "text": "Balcony door lock is jammed.", "ts": 179185e7 }, "c14": { "cat": "Cleanliness", "name": "Yash Gupta", "room": "203", "sid": "S111", "status": "Open", "text": "Room has not been swept for three days.", "ts": 1792085e6 }, "c15": { "cat": "Electricity / Water", "name": "Rahul Das", "reply": "Technician will visit tomorrow.", "room": "301", "sid": "S112", "status": "In Progress", "text": "AC remote is not working.", "ts": 1792075e6 }, "c2": { "cat": "Cleanliness", "name": "Vikram Singh", "room": "103", "sid": "S104", "status": "Open", "text": "Corridor near room 103 has not been cleaned for two days.", "ts": 176095e7 }, "c3": { "cat": "Maintenance", "name": "Neel Patel", "reply": "Latch was replaced on Wednesday.", "room": "201", "sid": "S106", "status": "Resolved", "text": "Window latch is broken.", "ts": 17607e8 }, "c4": { "cat": "Electricity / Water", "name": "Ishaan Kapoor", "room": "202", "sid": "S109", "status": "Open", "text": "Geyser is not heating in the common bathroom.", "ts": 179209e7 }, "c5": { "cat": "Maintenance", "name": "Rahul Das", "reply": "Carpenter is scheduled for Saturday.", "room": "301", "sid": "S112", "status": "In Progress", "text": "Balcony door does not close properly.", "ts": 179207e7 }, "c6": { "cat": "Food / Mess", "name": "Yash Gupta", "reply": "Raised with the mess contractor. Dinner timing has been corrected.", "room": "203", "sid": "S111", "status": "Resolved", "text": "Dinner was served cold on Tuesday.", "ts": 179195e7 }, "c7": { "cat": "Maintenance", "handledAt": 1792241002796, "handledBy": "Warden", "name": "Radha Krishna", "room": "302", "sid": "106", "status": "In Progress", "text": "Study table drawer is stuck.", "ts": 179212e7 }, "c8": { "cat": "Cleanliness", "name": "Rohan Verma", "room": "101", "sid": "S102", "status": "Open", "text": "Washroom floor stays wet and slippery.", "ts": 1792095e6 }, "c9": { "cat": "Electricity / Water", "handledAt": 179204e7, "handledBy": "Warden", "name": "Karan Mehta", "reply": "Tube light has been replaced.", "room": "102", "sid": "S103", "status": "Resolved", "text": "Tube light keeps flickering.", "ts": 179198e7 }, "xndtwi9h5h7zvkklgtq9": { "cat": "Cleanliness", "handledAt": 1792240536078, "handledBy": "Warden", "name": "Radha Krishna", "room": "", "sid": "106", "status": "Resolved", "text": "Kfxxlgxly", "ts": 1792155083173 } }, "leaves": { "dcg30y7b2w5rirvlyx2c": { "from": "2026-10-16", "name": "Radha Krishna", "reason": "Home", "room": "", "sid": "106", "status": "Pending", "to": "2026-10-18", "ts": 1792175137331 }, "l1": { "from": "2026-10-24", "name": "Aarav Sharma", "reason": "Going home for a family function", "room": "101", "sid": "S101", "status": "Pending", "to": "2026-10-26", "ts": 17609e8 }, "l2": { "from": "2026-10-10", "name": "Karan Mehta", "reason": "Cousin's wedding", "room": "102", "sid": "S103", "status": "Approved", "to": "2026-10-12", "ts": 176e10 }, "l3": { "from": "2026-10-18", "name": "Aditya Rao", "reason": "Weekend trip with friends", "room": "103", "sid": "S105", "status": "Rejected", "to": "2026-10-19", "ts": 17607e8 }, "l4": { "from": "2026-10-30", "name": "Ishaan Kapoor", "reason": "Visiting home for the weekend", "room": "202", "sid": "S109", "status": "Pending", "to": "2026-11-02", "ts": 179208e7 }, "l5": { "from": "2026-10-20", "name": "Rahul Das", "reason": "Medical appointment in the city", "room": "301", "sid": "S112", "status": "Approved", "to": "2026-10-21", "ts": 1792e9 }, "l6": { "from": "2026-10-28", "name": "Radha Krishna", "reason": "Family function at home", "room": "302", "sid": "106", "status": "Pending", "to": "2026-10-30", "ts": 1792125e6 } }, "notices": { "n1": { "body": "From Monday, dinner will be served from 7:30 PM to 9:30 PM.", "title": "Mess timing change", "ts": 17608e8 }, "n10": { "body": "The mess committee meets on Saturday at 5 PM in the common hall. Two student representatives from each floor are invited.", "title": "Mess committee meeting", "ts": 1792125e6 }, "n2": { "body": "Second-term hostel fees must be cleared by the end of this month.", "title": "Fee due date", "ts": 17609e8 }, "n3": { "body": "Water will be unavailable on Saturday from 10 AM to 1 PM for tank cleaning.", "title": "Water supply maintenance", "ts": 1761e9 }, "n4": { "body": "The hostel gate will close at 8 PM on festival days. Students leaving for home should submit a leave request in advance.", "title": "Festival week schedule", "ts": 179205e7 }, "n5": { "body": "Wi-Fi will be down on Sunday from 2 PM to 4 PM while routers are upgraded.", "title": "Wi-Fi maintenance", "ts": 179208e7 }, "n6": { "body": "Please keep corridors free of shoes and luggage. Fire safety inspection is on Monday.", "title": "Fire safety inspection", "ts": 17921e8 }, "n8": { "body": "Laundry pickup is on Tuesday and Friday between 8 AM and 10 AM at the ground floor desk.", "title": "Laundry schedule", "ts": 1792115e6 }, "n9": { "body": "Students who want to take part in the cultural night should register with the warden by Friday.", "title": "Cultural night registration", "ts": 179212e7 } }, "payments": { "p1": { "amt": 3e4, "method": "UPI", "name": "Aarav Sharma", "note": "Term 1, instalment 1", "rcpt": "R-1001", "sid": "S101", "ts": 17855424e5 }, "p10": { "amt": 15e3, "method": "Cash", "name": "Dev Malhotra", "note": "Partial payment", "rcpt": "R-1014", "sid": "S110", "ts": 178632e7 }, "p11": { "amt": 35e3, "method": "Bank transfer", "name": "Yash Gupta", "note": "Term 1, instalment 1", "rcpt": "R-1016", "sid": "S111", "ts": 178632e7 }, "p12": { "amt": 25e3, "method": "Card", "name": "Rahul Das", "note": "Term 1, instalment 1", "rcpt": "R-1018", "sid": "S112", "ts": 178632e7 }, "p13": { "amt": 25e3, "method": "UPI", "name": "Vikram Singh", "note": "Term 1, instalment 2", "rcpt": "R-1006", "sid": "S104", "ts": 17885664e5 }, "p14": { "amt": 35e3, "method": "Bank transfer", "name": "Neel Patel", "note": "Term 1, instalment 2", "rcpt": "R-1007", "sid": "S106", "ts": 17885664e5 }, "p15": { "amt": 25e3, "method": "UPI", "name": "Ishaan Kapoor", "note": "Term 1, instalment 2", "rcpt": "R-1013", "sid": "S109", "ts": 17911584e5 }, "p16": { "amt": 25e3, "method": "UPI", "name": "Yash Gupta", "note": "Term 1, instalment 2", "rcpt": "R-1017", "sid": "S111", "ts": 17885664e5 }, "p17": { "amt": 2e4, "method": "UPI", "name": "Rahul Das", "note": "Term 1, instalment 2", "rcpt": "R-1019", "sid": "S112", "ts": 17911584e5 }, "p18": { "amt": 15e3, "method": "UPI", "name": "Rohan Verma", "note": "Term 1, instalment 2", "rcpt": "R-1005", "sid": "S102", "ts": 17885664e5 }, "p19": { "amt": 1e4, "method": "UPI", "name": "Dev Malhotra", "note": "Partial payment", "rcpt": "R-1015", "sid": "S110", "ts": 17917632e5 }, "p2": { "amt": 3e4, "method": "Bank transfer", "name": "Aarav Sharma", "note": "Term 1, instalment 2", "rcpt": "R-1008", "sid": "S101", "ts": 17911584e5 }, "p20": { "amt": 3e4, "method": "UPI", "name": "Arjun Reddy", "note": "Term 1, instalment 1", "rcpt": "R-1020", "sid": "S113", "ts": 17918496e5 }, "p21": { "amt": 2e4, "method": "UPI", "name": "Radha Krishna", "note": "Term 1, instalment 1", "rcpt": "R-1021", "sid": "106", "ts": 17908128e5 }, "p22": { "amt": 15e3, "method": "Cash", "name": "Radha Krishna", "note": "Term 1, instalment 2", "rcpt": "R-1022", "sid": "106", "ts": 17917632e5 }, "p3": { "amt": 15e3, "method": "Cash", "name": "Rohan Verma", "note": "Term 1, instalment 1", "rcpt": "R-1002", "sid": "S102", "ts": 178632e7 }, "p4": { "amt": 25e3, "method": "UPI", "name": "Karan Mehta", "note": "Term 1, instalment 1", "rcpt": "R-1003", "sid": "S103", "ts": 178632e7 }, "p5": { "amt": 2e4, "method": "Cash", "name": "Karan Mehta", "note": "Term 1, instalment 2", "rcpt": "R-1009", "sid": "S103", "ts": 17911584e5 }, "p6": { "amt": 3e4, "method": "Bank transfer", "name": "Vikram Singh", "note": "Term 1, instalment 1", "rcpt": "R-1004", "sid": "S104", "ts": 17855424e5 }, "p7": { "amt": 4e4, "method": "Card", "name": "Neel Patel", "note": "Term 1, instalment 1", "rcpt": "R-1010", "sid": "S106", "ts": 17855424e5 }, "p8": { "amt": 1e4, "method": "Cash", "name": "Siddharth Nair", "note": "Partial payment", "rcpt": "R-1011", "sid": "S107", "ts": 17917632e5 }, "p9": { "amt": 3e4, "method": "UPI", "name": "Ishaan Kapoor", "note": "Term 1, instalment 1", "rcpt": "R-1012", "sid": "S109", "ts": 178632e7 } }, "roomreq": { "gjv1ug57mzdq2vb7cpnp": { "from": "", "name": "Radha Krishna", "reason": "Need a quieter room for study.", "sid": "106", "status": "Pending", "to": "103", "ts": 1792175150796 }, "r1": { "from": "", "name": "Siddharth Nair", "reason": "I have not been allocated a room yet and need one near the library.", "sid": "S107", "status": "Pending", "to": "202", "ts": 1792e9 }, "r2": { "from": "103", "name": "Aditya Rao", "reason": "Need a quieter room for evening study.", "sid": "S105", "status": "Pending", "to": "102", "ts": 179205e7 }, "r3": { "from": "103", "name": "Vikram Singh", "reason": "Wants an AC room.", "sid": "S104", "status": "Rejected", "to": "201", "ts": 17917e8 } }, "rooms": { "101": { "amenities": "AC, Wi-Fi, Attached bathroom, Study table, Wardrobe", "cap": 2, "condition": "Good", "floor": "2", "items": "2 beds, 2 mattresses, 2 study tables, 2 chairs, 2 wardrobes, ceiling fan, AC, tube light, dustbin", "lastCleaned": "2026-10-14", "meter": "4,820 kWh", "notes": "AC remote is kept with the floor warden. Please switch off the AC when leaving the room.", "rent": 6e3, "type": "Double, AC", "wifi": "Hostel-F1" }, "103": { "amenities": "Wi-Fi, Balcony, Wardrobe, Common bathroom", "cap": 3, "condition": "Needs repair", "floor": "1", "items": "3 beds, 3 mattresses, 3 study tables, 3 chairs, 3 wardrobes, ceiling fan, tube light, dustbin", "lastCleaned": "2026-10-13", "meter": "5,310 kWh", "notes": "Balcony door lock is being replaced. Please do not leave valuables unattended.", "rent": 3800, "type": "Triple", "wifi": "Hostel-F1" }, "201": { "amenities": "AC, Wi-Fi, Attached bathroom, Study table, Mini fridge", "cap": 1, "condition": "Excellent", "floor": "2", "items": "1 bed, 1 mattress, study table, chair, wardrobe, AC, mini fridge, ceiling fan, dustbin", "lastCleaned": "2026-10-15", "meter": "2,205 kWh", "notes": "Mini fridge must be defrosted once a month.", "rent": 9e3, "type": "Single, AC", "wifi": "Hostel-F2" }, "202": { "amenities": "Wi-Fi, Study table, Wardrobe, Common bathroom", "cap": 3, "condition": "Good", "floor": "2", "items": "3 beds, 3 mattresses, 3 study tables, 3 chairs, 3 wardrobes, ceiling fan, tube light, dustbin", "lastCleaned": "2026-10-15", "meter": "3,478 kWh", "notes": "One bed is currently free for a new resident.", "rent": 3800, "type": "Triple", "wifi": "Hostel-F2" }, "203": { "amenities": "Wi-Fi, Study table, Wardrobe, Common bathroom", "cap": 2, "condition": "Good", "floor": "2", "items": "2 beds, 2 mattresses, 2 study tables, 2 chairs, 2 wardrobes, ceiling fan, dustbin", "lastCleaned": "2026-10-15", "meter": "1,940 kWh", "notes": "Window faces the garden. Keep windows closed after sunset to avoid mosquitoes.", "rent": 4500, "type": "Double", "wifi": "Hostel-F2" }, "204": { "amenities": "AC, Wi-Fi, Study table, Wardrobe, Common bathroom", "cap": 2, "condition": "Excellent", "floor": "2", "items": "2 beds, 2 mattresses, 2 study tables, 2 chairs, 2 wardrobes, AC, dustbin", "lastCleaned": "2026-10-15", "meter": "620 kWh", "notes": "Newly furnished room.", "rent": 6e3, "type": "Double, AC", "wifi": "Hostel-F2" }, "301": { "amenities": "AC, Wi-Fi, Attached bathroom, Study table, Balcony", "cap": 1, "condition": "Excellent", "floor": "3", "items": "1 bed, 1 mattress, study table, chair, wardrobe, AC, balcony chair, ceiling fan, dustbin", "lastCleaned": "2026-10-12", "meter": "1,120 kWh", "notes": "Balcony door needs adjustment. A carpenter is scheduled.", "rent": 9e3, "type": "Single, AC", "wifi": "Hostel-F3" }, "302": { "amenities": "Wi-Fi, Wardrobe, Common bathroom, Reading lamp", "cap": 3, "condition": "Good", "floor": "3", "items": "3 beds, 3 mattresses, 3 study tables, 3 chairs, 3 wardrobes, ceiling fan, reading lamps, dustbin", "lastCleaned": "2026-10-12", "meter": "890 kWh", "notes": "Newly painted this term.", "rent": 3800, "type": "Triple", "wifi": "Hostel-F3" }, "303": { "amenities": "Wi-Fi, Balcony, Wardrobe, Common bathroom", "cap": 3, "condition": "Good", "floor": "3", "items": "3 beds, 3 mattresses, 3 study tables, 3 chairs, 3 wardrobes, ceiling fan, dustbin", "lastCleaned": "2026-10-14", "meter": "310 kWh", "notes": "Corner room with a balcony.", "rent": 3800, "type": "Triple", "wifi": "Hostel-F3" }, "102": { "type": "Double", "cap": 2, "floor": "1", "rent": 4500, "amenities": "Wi-Fi, Study table, Wardrobe, Common bathroom", "condition": "Good", "lastCleaned": "2026-10-14", "meter": "3,964 kWh", "wifi": "Hostel-F1", "items": "2 beds, 2 mattresses, 2 study tables, 2 chairs, 2 wardrobes, ceiling fan, tube light, dustbin", "notes": "Common bathroom is at the end of the corridor." } }, "settings": { "contacts": { "ambulance": "108", "medical": "Dr. Anita Rao \xB7 9800033333", "security": "Gate desk \xB7 9800022222", "warden": "Mr. R. K. Sinha \xB7 9800011111" }, "main": { "mgrPass": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9", "mgrUser": "manager", "rules": "1. Quiet hours: 10 PM to 6 AM.\n2. Visitors only in the common area, before 7 PM.\n3. Keep rooms and shared spaces clean.\n4. Return by 9 PM unless you have prior permission.\n5. No cooking appliances or smoking in rooms.\n6. Report damages and issues promptly.", "wardenPass": "a08cacabcf3487a4830186ace52ea1cb2cabe3a69b9a037f2fcd67218963aaa3", "wardenUser": "warden" }, "mess": { "Fri": { "b": "Bread, jam, boiled eggs", "d": "Veg biryani, raita", "l": "Rice, dal tadka, paneer bhurji" }, "Mon": { "b": "Poha, tea", "d": "Roti, dal fry, mixed veg", "l": "Rice, dal, aloo gobi, salad" }, "Sat": { "b": "Puri bhaji", "d": "Roti, egg curry / soya curry", "l": "Chole bhature, salad" }, "Sun": { "b": "Dosa, chutney", "d": "Pulao, mixed dal, sweet", "l": "Special thali" }, "Thu": { "b": "Upma, banana", "d": "Roti, chana masala, rice", "l": "Rice, sambar, cabbage poriyal" }, "Tue": { "b": "Idli, sambar, chutney", "d": "Roti, paneer curry, rice", "l": "Rice, rajma, jeera aloo" }, "Wed": { "b": "Aloo paratha, curd", "d": "Fried rice, manchurian", "l": "Rice, kadhi, bhindi fry" } } }, "students": { "106": { "address": "22 Gandhi Road, Vijayawada", "bed": "B", "checkIn": "2026-10-12", "course": "3", "deposit": 8e3, "dueDate": "2026-10-31", "email": "radha.krishna@example.com", "fatherName": "Ramesh Krishna", "fatherPhone": "9812300106", "feeItems": { "maintenance": 4e3, "mess": 24e3, "rent": 22800, "utilities": 4200 }, "feePaid": 35e3, "feeTotal": 55e3, "gphone": "9812300106", "guardian": "Ramesh Krishna", "id": "106", "key": "K-302-B", "motherName": "Lakshmi Krishna", "motherPhone": "9812300107", "name": "Radha Krishna", "phone": "9000000106", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "302", "ts": 1792155053490 }, "S101": { "address": "12 Lake View Road, Jaipur", "bed": "A", "checkIn": "2026-07-15", "course": "B.Tech CSE - 2nd Year", "deposit": 15e3, "dueDate": "2026-10-31", "email": "aarav.sharma@example.com", "fatherName": "Rakesh Sharma", "fatherPhone": "9812300001", "feeItems": { "maintenance": 3e3, "mess": 18e3, "rent": 36e3, "utilities": 3e3 }, "feePaid": 6e4, "feeTotal": 6e4, "gphone": "9812300001", "guardian": "Rakesh Sharma", "id": "S101", "key": "K-101-A", "motherName": "Meena Sharma", "motherPhone": "9812300021", "name": "Aarav Sharma", "phone": "9876500001", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "", "ts": 176e10 }, "S102": { "address": "45 Civil Lines, Lucknow", "bed": "", "checkIn": "2026-07-15", "course": "B.Tech ECE - 2nd Year", "deposit": 15e3, "dueDate": "2026-10-31", "email": "rohan.verma@example.com", "fatherName": "Mahesh Verma", "fatherPhone": "9812300031", "feeItems": { "maintenance": 3e3, "mess": 18e3, "rent": 36e3, "utilities": 3e3 }, "feePaid": 3e4, "feeTotal": 6e4, "gphone": "9812300002", "guardian": "Sunita Verma", "id": "S102", "key": "K-101-B", "motherName": "Anita Verma", "motherPhone": "9812300022", "name": "Rohan Verma", "phone": "9876500002", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "204", "ts": 17600001e5 }, "S103": { "address": "7 MG Road, Indore", "bed": "A", "checkIn": "2026-07-18", "course": "BBA - 1st Year", "deposit": 1e4, "dueDate": "2026-10-31", "email": "karan.mehta@example.com", "fatherName": "Anil Mehta", "fatherPhone": "9812300003", "feeItems": { "maintenance": 4e3, "mess": 24e3, "rent": 27e3, "utilities": 5e3 }, "feePaid": 45e3, "feeTotal": 6e4, "gphone": "9812300003", "guardian": "Anil Mehta", "id": "S103", "key": "K-102-A", "motherName": "Kavita Mehta", "motherPhone": "9812300032", "name": "Karan Mehta", "phone": "9876500003", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "", "ts": 17600002e5 }, "S104": { "address": "88 Park Street, Kolkata", "bed": "A", "checkIn": "2026-07-20", "course": "B.Sc Physics - 3rd Year", "deposit": 8e3, "dueDate": "2026-10-31", "email": "vikram.singh@example.com", "fatherName": "Harpreet Singh", "fatherPhone": "9812300004", "feeItems": { "maintenance": 4e3, "mess": 24e3, "rent": 22800, "utilities": 4200 }, "feePaid": 55e3, "feeTotal": 55e3, "gphone": "9812300004", "guardian": "Harpreet Singh", "id": "S104", "key": "K-103-A", "motherName": "Gurpreet Kaur", "motherPhone": "9812300033", "name": "Vikram Singh", "phone": "9876500004", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "103", "ts": 17600003e5 }, "S105": { "address": "21 Hill Road, Pune", "bed": "B", "checkIn": "2026-07-22", "course": "MBA - 1st Year", "deposit": 8e3, "dueDate": "2026-10-31", "email": "aditya.rao@example.com", "fatherName": "Srinivas Rao", "fatherPhone": "9812300034", "feeItems": { "maintenance": 4e3, "mess": 24e3, "rent": 22800, "utilities": 4200 }, "feePaid": 0, "feeTotal": 55e3, "gphone": "9812300005", "guardian": "Lakshmi Rao", "id": "S105", "key": "K-103-B", "motherName": "Lakshmi Rao", "motherPhone": "9812300005", "name": "Aditya Rao", "phone": "9876500005", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "103", "ts": 17600004e5 }, "S106": { "address": "3 Ring Road, Surat", "bed": "A", "checkIn": "2026-07-12", "course": "B.Com - 2nd Year", "deposit": 2e4, "dueDate": "2026-10-31", "email": "neel.patel@example.com", "fatherName": "Dinesh Patel", "fatherPhone": "9812300006", "feeItems": { "maintenance": 2500, "mess": 15e3, "rent": 54e3, "utilities": 3500 }, "feePaid": 75e3, "feeTotal": 75e3, "gphone": "9812300006", "guardian": "Dinesh Patel", "id": "S106", "key": "K-201-A", "motherName": "Hetal Patel", "motherPhone": "9812300035", "name": "Neel Patel", "phone": "9876500006", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "201", "ts": 17600005e5 }, "S107": { "address": "5 Marine Drive, Kochi", "course": "B.Tech Mech - 3rd Year", "dueDate": "2026-10-31", "email": "siddharth.nair@example.com", "fatherName": "Gopal Nair", "fatherPhone": "9812300036", "feeItems": { "maintenance": 3e3, "mess": 24e3, "rent": 3e4, "utilities": 3e3 }, "feePaid": 1e4, "feeTotal": 6e4, "gphone": "9812300036", "guardian": "Gopal Nair", "id": "S107", "motherName": "Radhika Nair", "motherPhone": "9812300037", "name": "Siddharth Nair", "phone": "9876500007", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "303", "ts": 17600006e5 }, "S108": { "address": "19 Civil Lines, Nagpur", "course": "BCA - 1st Year", "email": "manav.joshi@example.com", "fatherName": "Pankaj Joshi", "fatherPhone": "9812300038", "feePaid": 0, "feeTotal": 0, "gphone": "9812300038", "guardian": "Pankaj Joshi", "id": "S108", "motherName": "Neha Joshi", "motherPhone": "9812300039", "name": "Manav Joshi", "phone": "9876500008", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "", "ts": 17600007e5 }, "S109": { "address": "14 Sector 9, Chandigarh", "bed": "A", "checkIn": "2026-08-01", "course": "B.Tech IT - 1st Year", "deposit": 8e3, "dueDate": "2026-10-31", "email": "ishaan.kapoor@example.com", "fatherName": "Vikas Kapoor", "fatherPhone": "9812300040", "feeItems": { "maintenance": 4e3, "mess": 24e3, "rent": 22800, "utilities": 4200 }, "feePaid": 55e3, "feeTotal": 55e3, "gphone": "9812300009", "guardian": "Meera Kapoor", "id": "S109", "key": "K-202-A", "motherName": "Meera Kapoor", "motherPhone": "9812300009", "name": "Ishaan Kapoor", "phone": "9876500009", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "202", "ts": 1760001e6 }, "S110": { "address": "9 Model Town, Ludhiana", "bed": "B", "checkIn": "2026-08-01", "course": "MBA - 2nd Year", "deposit": 8e3, "dueDate": "2026-10-31", "email": "dev.malhotra@example.com", "fatherName": "Sanjay Malhotra", "fatherPhone": "9812300010", "feeItems": { "maintenance": 4e3, "mess": 24e3, "rent": 22800, "utilities": 4200 }, "feePaid": 25e3, "feeTotal": 55e3, "gphone": "9812300010", "guardian": "Sanjay Malhotra", "id": "S110", "key": "K-202-B", "motherName": "Rekha Malhotra", "motherPhone": "9812300041", "name": "Dev Malhotra", "phone": "9876500010", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "202", "ts": 17600011e5 }, "S111": { "address": "56 Gandhi Nagar, Bhopal", "bed": "A", "checkIn": "2026-08-03", "course": "B.Com - 1st Year", "deposit": 1e4, "dueDate": "2026-10-31", "email": "yash.gupta@example.com", "fatherName": "Rajesh Gupta", "fatherPhone": "9812300042", "feeItems": { "maintenance": 4e3, "mess": 24e3, "rent": 27e3, "utilities": 5e3 }, "feePaid": 6e4, "feeTotal": 6e4, "gphone": "9812300011", "guardian": "Pooja Gupta", "id": "S111", "key": "K-203-A", "motherName": "Pooja Gupta", "motherPhone": "9812300011", "name": "Yash Gupta", "phone": "9876500011", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "203", "ts": 17600012e5 }, "S112": { "address": "31 Salt Lake, Kolkata", "bed": "A", "checkIn": "2026-08-05", "course": "M.Tech - 1st Year", "deposit": 2e4, "dueDate": "2026-10-31", "email": "rahul.das@example.com", "fatherName": "Subir Das", "fatherPhone": "9812300012", "feeItems": { "maintenance": 6e3, "mess": 24e3, "rent": 54e3, "utilities": 6e3 }, "feePaid": 45e3, "feeTotal": 9e4, "gphone": "9812300012", "guardian": "Subir Das", "id": "S112", "key": "K-301-A", "motherName": "Mitali Das", "motherPhone": "9812300043", "name": "Rahul Das", "phone": "9876500012", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "301", "ts": 17600013e5 }, "S113": { "address": "17 Jubilee Hills, Hyderabad", "bed": "A", "checkIn": "2026-10-10", "course": "B.Tech Civil - 1st Year", "deposit": 8e3, "dueDate": "2026-10-31", "email": "arjun.reddy@example.com", "fatherName": "Venkat Reddy", "fatherPhone": "9812300013", "feeItems": { "maintenance": 4e3, "mess": 24e3, "rent": 22800, "utilities": 4200 }, "feePaid": 3e4, "feeTotal": 55e3, "gphone": "9812300013", "guardian": "Venkat Reddy", "id": "S113", "key": "K-302-A", "motherName": "Sunitha Reddy", "motherPhone": "9812300044", "name": "Arjun Reddy", "phone": "9876500013", "pw": "703b0a3d6ad75b649a28adde7d83c6251da457549263bc7ff45ec709b0a8448b", "room": "302", "ts": 17919e8 } }, "visitors": { "v1": { "inAt": 17921466e5, "name": "Aarav Sharma", "outAt": 17921538e5, "phone": "9812300001", "purpose": "Family visit", "relation": "Father", "sid": "S101", "visitor": "Rakesh Sharma" }, "v10": { "inAt": 17916336e5, "name": "Vikram Singh", "outAt": 17916426e5, "phone": "9812300004", "purpose": "Family visit", "relation": "Father", "sid": "S104", "visitor": "Harpreet Singh" }, "v11": { "inAt": 17920872e5, "name": "Aditya Rao", "outAt": 17920908e5, "phone": "9812300005", "purpose": "Dropped medicines", "relation": "Mother", "sid": "S105", "visitor": "Lakshmi Rao" }, "v12": { "inAt": 17911224e5, "name": "Neel Patel", "outAt": 17911278e5, "phone": "9812300006", "purpose": "Family visit", "relation": "Father", "sid": "S106", "visitor": "Dinesh Patel" }, "v13": { "inAt": 179181e7, "name": "Dev Malhotra", "outAt": 17918136e5, "phone": "9812300010", "purpose": "Family visit", "relation": "Father", "sid": "S110", "visitor": "Sanjay Malhotra" }, "v14": { "inAt": 17915436e5, "name": "Yash Gupta", "outAt": 17915508e5, "phone": "9812300011", "purpose": "Brought festival sweets", "relation": "Mother", "sid": "S111", "visitor": "Pooja Gupta" }, "v15": { "inAt": 17921412e5, "name": "Rahul Das", "outAt": 0, "phone": "9812300012", "purpose": "Bringing documents", "relation": "Father", "sid": "S112", "visitor": "Subir Das" }, "v16": { "inAt": 17919954e5, "name": "Radha Krishna", "outAt": 17920008e5, "phone": "9812300106", "purpose": "Family visit", "relation": "Father", "sid": "106", "visitor": "Ramesh Krishna" }, "v17": { "inAt": 1791828e6, "name": "Radha Krishna", "outAt": 17918316e5, "phone": "9811100077", "purpose": "Study group", "relation": "Friend", "sid": "106", "visitor": "Suresh Babu" }, "v18": { "inAt": 17921448e5, "name": "Radha Krishna", "outAt": 0, "phone": "9812300107", "purpose": "Brought lunch", "relation": "Mother", "sid": "106", "visitor": "Lakshmi Krishna" }, "v2": { "inAt": 179214e7, "name": "Vikram Singh", "outAt": 0, "phone": "9811122233", "purpose": "Study discussion", "relation": "Friend", "sid": "S104", "visitor": "Arjun Bedi" }, "v3": { "inAt": 179206e7, "name": "Neel Patel", "outAt": 17920672e5, "phone": "9812300006", "purpose": "Dropped books", "relation": "Brother", "sid": "S106", "visitor": "Chirag Patel" }, "v4": { "inAt": 17919e8, "name": "Ishaan Kapoor", "outAt": 17919072e5, "phone": "9812300009", "purpose": "Family visit", "relation": "Mother", "sid": "S109", "visitor": "Meera Kapoor" }, "v5": { "inAt": 17918e8, "name": "Karan Mehta", "outAt": 1791808e6, "phone": "9822200044", "purpose": "Casual visit", "relation": "Cousin", "sid": "S103", "visitor": "Nikhil Mehta" }, "v6": { "inAt": 17918892e5, "name": "Aarav Sharma", "outAt": 17918946e5, "phone": "9812300021", "purpose": "Dropped home-cooked food", "relation": "Mother", "sid": "S101", "visitor": "Meena Sharma" }, "v7": { "inAt": 17913888e5, "name": "Aarav Sharma", "outAt": 1791396e6, "phone": "9811100055", "purpose": "Project discussion", "relation": "Classmate", "sid": "S101", "visitor": "Kabir Anand" }, "v8": { "inAt": 179199e7, "name": "Rohan Verma", "outAt": 17919936e5, "phone": "9812300022", "purpose": "Family visit", "relation": "Mother", "sid": "S102", "visitor": "Anita Verma" }, "v9": { "inAt": 1791738e6, "name": "Karan Mehta", "outAt": 17917425e5, "phone": "9812300023", "purpose": "Brought documents", "relation": "Sister", "sid": "S103", "visitor": "Priya Mehta" } } };
+function makeDb() {
+  const KEY2 = "hostelhub_db_v1";
+  const listeners = [];
+  let data = null, memoryOnly = false;
+  const clone = (o) => JSON.parse(JSON.stringify(o));
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY2);
+      if (raw) {
+        data = JSON.parse(raw);
+        return;
+      }
+    } catch (e) {
+      memoryOnly = true;
+    }
+    data = clone(SEED);
+    save();
+  }
+  function save() {
+    if (memoryOnly) return;
+    try {
+      localStorage.setItem(KEY2, JSON.stringify(data));
+    } catch (e) {
+      memoryOnly = true;
+    }
+  }
+  const sig = (v) => JSON.stringify(v === void 0 ? null : v);
+  const colSnap = (c) => ({ docs: Object.entries(data[c] || {}).map(([id, d]) => ({ id, exists: true, data: () => d })) });
+  const docSnap = (c, id) => {
+    const d = (data[c] || {})[id];
+    return { id, exists: d !== void 0, data: () => d };
+  };
+  function notify() {
+    listeners.forEach((l) => {
+      const s = l.col ? sig(data[l.col]) : sig((data[l.c] || {})[l.id]);
+      if (s !== l.last) {
+        l.last = s;
+        l.cb(l.col ? colSnap(l.col) : docSnap(l.c, l.id));
+      }
+    });
+  }
+  function listen(l) {
+    listeners.push(l);
+    setTimeout(notify, 0);
+  }
+  function write(c, id, obj, mode) {
+    data[c] = data[c] || {};
+    if (mode === "update") {
+      if (data[c][id] === void 0) throw Object.assign(new Error("Record does not exist"), { code: "not_found" });
+      data[c][id] = __spreadValues(__spreadValues({}, data[c][id]), clone(obj));
+    } else {
+      data[c][id] = clone(obj);
+    }
+    save();
+    notify();
+  }
+  const newId = () => Array.from(crypto.getRandomValues(new Uint8Array(10)), (b) => b.toString(16).padStart(2, "0")).join("");
+  load();
+  window.addEventListener("storage", (e) => {
+    if (e.key === KEY2) {
+      load();
+      notify();
+    }
+  });
+  return {
+    collection(name) {
+      return {
+        limit() {
+          return this;
+        },
+        onSnapshot(cb, err) {
+          listen({ col: name, cb, err, last: void 0 });
+          return () => {
+          };
+        },
+        add(obj) {
+          return __async(this, null, function* () {
+            const id = newId();
+            write(name, id, obj, "set");
+            return { id };
+          });
+        }
+      };
+    },
+    doc(path) {
+      const [c, id] = path.split("/");
+      return {
+        onSnapshot(cb, err) {
+          listen({ c, id, cb, err, last: void 0 });
+          return () => {
+          };
+        },
+        set(obj) {
+          return __async(this, null, function* () {
+            write(c, id, obj, "set");
+          });
+        },
+        update(obj) {
+          return __async(this, null, function* () {
+            write(c, id, obj, "update");
+          });
+        },
+        delete() {
+          return __async(this, null, function* () {
+            if (data[c]) delete data[c][id];
+            save();
+            notify();
+          });
+        }
+      };
+    }
+  };
+}
+function resetDemo() {
+  if (confirm("Reset all data back to the sample data?")) {
+    try {
+      localStorage.removeItem("hostelhub_db_v1");
+      sessionStorage.clear();
+    } catch (e) {
+    }
+    location.reload();
+  }
+}
+let db = null, ld = 0, me = null, scr = "slogin", view = "home", edit = null, adate = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10), dirty = 0;
+const S = { students: [], rooms: [], complaints: [], notices: [], att: [], pays: [], leaves: [], visits: [], rreqs: [], contacts: null, mess: null, cfg: null };
+const A = document.getElementById("app");
+const esc = (s) => String(s != null ? s : "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const clean = (s) => String(s).trim().replace(/[^\w-]/g, "").slice(0, 40);
+const fd = (f) => Object.fromEntries(new FormData(f));
+function sha256Fallback(str) {
+  const bytes = new TextEncoder().encode(str), len = bytes.length;
+  const K = new Uint32Array([1116352408, 1899447441, 3049323471, 3921009573, 961987163, 1508970993, 2453635748, 2870763221, 3624381080, 310598401, 607225278, 1426881987, 1925078388, 2162078206, 2614888103, 3248222580, 3835390401, 4022224774, 264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986, 2554220882, 2821834349, 2952996808, 3210313671, 3336571891, 3584528711, 113926993, 338241895, 666307205, 773529912, 1294757372, 1396182291, 1695183700, 1986661051, 2177026350, 2456956037, 2730485921, 2820302411, 3259730800, 3345764771, 3516065817, 3600352804, 4094571909, 275423344, 430227734, 506948616, 659060556, 883997877, 958139571, 1322822218, 1537002063, 1747873779, 1955562222, 2024104815, 2227730452, 2361852424, 2428436474, 2756734187, 3204031479, 3329325298]);
+  const H = new Uint32Array([1779033703, 3144134277, 1013904242, 2773480762, 1359893119, 2600822924, 528734635, 1541459225]);
+  const total = len + 9 + 63 >> 6 << 6, buf = new Uint8Array(total);
+  buf.set(bytes);
+  buf[len] = 128;
+  const dv = new DataView(buf.buffer);
+  dv.setUint32(total - 8, Math.floor(len * 8 / 4294967296));
+  dv.setUint32(total - 4, len * 8 >>> 0);
+  const w = new Uint32Array(64), rotr = (x, n) => x >>> n | x << 32 - n;
+  for (let off = 0; off < total; off += 64) {
+    for (let i = 0; i < 16; i++) w[i] = dv.getUint32(off + i * 4);
+    for (let i = 16; i < 64; i++) {
+      const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ w[i - 15] >>> 3, s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ w[i - 2] >>> 10;
+      w[i] = w[i - 16] + s0 + w[i - 7] + s1 >>> 0;
+    }
+    let [a, b, c, d, e, f, g, hh] = H;
+    for (let i = 0; i < 64; i++) {
+      const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25), ch = e & f ^ ~e & g, t1 = hh + S1 + ch + K[i] + w[i] >>> 0;
+      const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22), mj = a & b ^ a & c ^ b & c, t2 = S0 + mj >>> 0;
+      hh = g;
+      g = f;
+      f = e;
+      e = d + t1 >>> 0;
+      d = c;
+      c = b;
+      b = a;
+      a = t1 + t2 >>> 0;
+    }
+    H[0] += a;
+    H[1] += b;
+    H[2] += c;
+    H[3] += d;
+    H[4] += e;
+    H[5] += f;
+    H[6] += g;
+    H[7] += hh;
+  }
+  return Array.from(H, (x) => x.toString(16).padStart(8, "0")).join("");
+}
+const h = (t) => __async(null, null, function* () {
+  return window.crypto && crypto.subtle ? [...new Uint8Array(yield crypto.subtle.digest("SHA-256", new TextEncoder().encode(t)))].map((b) => b.toString(16).padStart(2, "0")).join("") : sha256Fallback(t);
+});
+const occ = (r) => S.students.filter((s) => s.room === r.id), free = (r) => r.cap - occ(r).length;
+function toast(m) {
+  const t = document.getElementById("t");
+  t.textContent = m;
+  t.style.display = "block";
+  clearTimeout(toast.k);
+  toast.k = setTimeout(() => t.style.display = "none", 3200);
+}
+function put(p, d, upd) {
+  return __async(this, null, function* () {
+    try {
+      const r = db.doc(p);
+      upd ? yield r.update(d) : yield r.set(d);
+      patch(p, d);
+      settle();
+      return 1;
+    } catch (e) {
+      toast("Could not save: " + (e.message || e.code));
+    }
+  });
+}
+function del(p) {
+  return __async(this, null, function* () {
+    try {
+      yield db.doc(p).delete();
+      patch(p, 0, 1);
+      settle();
+      return 1;
+    } catch (e) {
+      toast(e.message);
+    }
+  });
+}
+function add(c, d) {
+  return __async(this, null, function* () {
+    try {
+      yield db.collection(c).add(d);
+      settle();
+      return 1;
+    } catch (e) {
+      toast(e.message);
+    }
+  });
+}
+const badge = (t, c = "") => `<span class="b ${c}">${t}</span>`;
+const fmt = (t) => new Date(t).toLocaleDateString(void 0, { day: "numeric", month: "short" });
+function init() {
+  return __async(this, null, function* () {
+    db = makeDb();
+    if (!db) {
+      render();
+      return;
+    }
+    const sub = (n, k, q2) => (q2 || db.collection(n)).onSnapshot((s) => {
+      S[k] = s.docs.map((d) => __spreadValues({ id: d.id }, d.data()));
+      if (k == "students") ld = 1;
+      snap();
+    }, (e) => toast(e.message));
+    sub("students", "students");
+    sub("rooms", "rooms");
+    sub("complaints", "complaints");
+    sub("notices", "notices");
+    sub("att", "att", db.collection("att").limit(1e3));
+    sub("payments", "pays");
+    sub("leaves", "leaves");
+    sub("visitors", "visits");
+    sub("roomreq", "rreqs");
+    db.doc("settings/contacts").onSnapshot((s) => {
+      S.contacts = s.data() || {};
+      snap();
+    }, (e) => toast(e.message));
+    db.doc("settings/mess").onSnapshot((s) => {
+      S.mess = s.data() || {};
+      snap();
+    }, (e) => toast(e.message));
+    let seeded = 0;
+    db.doc("settings/main").onSnapshot((s) => __async(null, null, function* () {
+      if (!s.exists && !seeded) {
+        seeded = 1;
+        yield put("settings/main", { mgrUser: "manager", mgrPass: yield h("admin123"), rules: "1. Quiet hours: 10 PM to 6 AM.\n2. Visitors only in the common area, before 7 PM.\n3. Keep rooms and shared spaces clean.\n4. Return by 9 PM unless you have prior permission.\n5. No cooking appliances or smoking in rooms.\n6. Report damages and issues promptly." });
+        return;
+      }
+      S.cfg = s.data() || null;
+      snap();
+    }), (e) => toast(e.message));
+    try {
+      const u = JSON.parse(sessionStorage.getItem("hh"));
+      if (u) {
+        me = u;
+        view = u.role == "m" ? "dash" : u.role == "w" ? "wlist" : "home";
+      }
+    } catch (e) {
+    }
+    render();
+  });
+}
+function snap() {
+  var _a;
+  if (/INPUT|TEXTAREA|SELECT/.test(((_a = document.activeElement) == null ? void 0 : _a.tagName) || "")) {
+    dirty = 1;
+    return;
+  }
+  render();
+}
+function render() {
+  dirty = 0;
+  if (!db) {
+    A.innerHTML = '<div class="login"><div class="card"><h2>Database unavailable</h2><p class="mu">Your browser blocked local storage, so the data cannot be kept.</p></div></div>';
+    return;
+  }
+  if (!ld || !S.cfg) {
+    A.innerHTML = '<div class="login"><p class="mu">Loading\u2026</p></div>';
+    return;
+  }
+  if (me) {
+    if (me.role == "s" && !S.students.find((s) => s.id == me.id)) return out();
+    A.innerHTML = me.role == "m" ? mgr() : me.role == "w" ? wdn() : stu();
+    return;
+  }
+  A.innerHTML = { slogin, mlogin, wlogin, reg }[scr]();
+}
+document.addEventListener("focusout", () => {
+  if (dirty) {
+    setTimeout(() => {
+      var _a;
+      if (!/INPUT|TEXTAREA|SELECT/.test(((_a = document.activeElement) == null ? void 0 : _a.tagName) || "")) {
+        dirty = 0;
+        render();
+      }
+    }, 300);
+  }
+});
+function go(v) {
+  view = v;
+  edit = null;
+  render();
+}
+function nav(s) {
+  scr = s;
+  try {
+    history.replaceState(null, "", "#" + s);
+  } catch (e) {
+  }
+  render();
+}
+function out() {
+  me = null;
+  scr = "slogin";
+  try {
+    history.replaceState(null, "", "#slogin");
+  } catch (e) {
+  }
+  try {
+    sessionStorage.removeItem("hh");
+  } catch (e) {
+  }
+  render();
+}
+function ok(u) {
+  me = u;
+  view = u.role == "m" ? "dash" : u.role == "w" ? "wlist" : "home";
+  try {
+    sessionStorage.setItem("hh", JSON.stringify(u));
+  } catch (e) {
+  }
+  render();
+}
+const slogin = () => `<div class="login"><div class="big">\u{1F3E0} HostelHub</div><p class="mu">Student login</p><div class="card"><form onsubmit="doS(event)"><label class="mu">Student ID</label><input name="id" required autocomplete="username"><label class="mu">Password</label><input name="pw" type="password" required autocomplete="current-password"><button style="width:100%">Log in</button></form><p class="mu">New here? <a class="l" onclick="nav('reg')">Register</a> \xB7 <a class="l" onclick="nav('mlogin')">Manager login</a> \xB7 <a class="l" onclick="nav('wlogin')">Warden login</a></p><p class="mu" style="font-size:12px">Demo login: student ID <b>S104</b>, password <b>student123</b>. Data is saved in this browser only. <a class="l" onclick="resetDemo()">Reset sample data</a></p></div></div>`;
+const mlogin = () => `<div class="login"><div class="big">\u{1F3E0} HostelHub</div><p class="mu">Hostel manager login</p><div class="card"><form onsubmit="doM(event)"><label class="mu">Username</label><input name="u" required autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="username"><label class="mu">Password</label><input name="pw" type="password" required><button style="width:100%">Log in</button></form><p class="mu">First time? Use <b>manager</b> / <b>admin123</b>, then change it under Rules &amp; Settings.</p><p class="mu"><a class="l" onclick="nav('slogin')">\u2190 Student login</a> \xB7 <a class="l" onclick="nav('wlogin')">Warden login</a></p></div></div>`;
+const reg = () => `<div class="login"><div class="big">Student registration</div><div class="card">${regForm()}<p class="mu"><a class="l" onclick="nav('slogin')">\u2190 Back to login</a></p></div><div class="card"><h2>Room availability</h2>${roomList()}</div></div>`;
+function regForm(e) {
+  return `<form onsubmit="saveS(event,'${e ? e.id : ""}',${!me})"><label class="mu">Full name</label><input name="name" required value="${esc(e == null ? void 0 : e.name)}"><label class="mu">Student ID / Roll no.</label><input name="id" ${e ? "readonly" : "required"} value="${esc(e == null ? void 0 : e.id)}"><label class="mu">Course / Year</label><input name="course" required value="${esc(e == null ? void 0 : e.course)}"><label class="mu">Phone</label><input name="phone" required value="${esc(e == null ? void 0 : e.phone)}"><label class="mu">Password${e ? " (leave blank to keep)" : ""}</label><input name="pw" type="password" ${e ? "" : "required"} minlength="4"><button>${e ? "Save changes" : "Register"}</button>${e ? ` <button type="button" class="g" onclick="go('students')">Cancel</button>` : ""}</form>`;
+}
+function doS(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target), s = S.students.find((x) => x.id.toLowerCase() == clean(f.id).toLowerCase());
+    if (s && (yield pwOk(s.pw, f.pw))) ok({ role: "s", id: s.id, name: s.name });
+    else toast("Wrong ID or password");
+  });
+}
+function doM(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target);
+    if (f.u.trim().toLowerCase() == S.cfg.mgrUser.toLowerCase() && (yield pwOk(S.cfg.mgrPass, f.pw))) ok({ role: "m", name: "Manager" });
+    else toast("Wrong username or password");
+  });
+}
+function shell(tabs, b) {
+  return `<header><b>\u{1F3E0} HostelHub</b><span>${esc(me.name)}</span><button class="g s" onclick="out()">Logout</button></header><nav>${tabs.map(([k, l]) => `<a class="${view == k ? "on" : ""}" onclick="go('${k}')">${l}</a>`).join("")}</nav><main>${b}</main>`;
+}
+function roomList() {
+  return S.rooms.length ? [...S.rooms].sort((a, b) => a.id.localeCompare(b.id, 0, { numeric: 1 })).map((r) => `<div class="row"><div class="f"><b>Room ${esc(r.id)}</b> <span class="mu">${esc(r.type)}${r.floor ? " \xB7 Floor " + esc(r.floor) : ""}${r.rent ? " \xB7 " + r.rent + "/mo" : ""}</span></div>${free(r) > 0 ? badge(free(r) + " of " + r.cap + " beds free", "ok") : badge("Full", "bad")}</div>`).join("") : '<p class="mu">No rooms listed yet.</p>';
+}
+const notices = () => [...S.notices].sort((a, b) => b.ts - a.ts);
+const stat = (c) => ({ Open: "bad", "In Progress": "w", Resolved: "ok" })[c] || "";
+function stu() {
+  const st = S.students.find((s) => s.id == me.id), tabs = [["home", "Overview"], ["myroom", "My Room"], ["profile", "Profile"], ["fees", "Fees"], ["leave", "Leave"], ["visits", "Visitors"], ["rreq", "Room Change"], ["mess", "Mess Menu"], ["comp", "Complaints"], ["notice", "Notices"], ["rules", "Rules"], ["rooms", "Availability"]];
+  let b = "";
+  if (view == "home") {
+    const r = S.rooms.find((x) => x.id == st.room), rec = S.att.filter((a) => a.sid == st.id).sort((a, b2) => b2.date.localeCompare(a.date)), pr = rec.filter((a) => a.status == "P").length, pc = rec.length ? Math.round(pr * 100 / rec.length) : 0, due = (st.feeTotal || 0) - (st.feePaid || 0);
+    b = `<div class="grid"><div class="card"><h2>My room</h2>${r ? `<div class="big">Room ${esc(r.id)}</div><p class="mu">${esc(r.type)} \xB7 ${r.cap} beds</p><p><b>Floor ${esc(r.floor || "\u2013")}</b> \xB7 <b>${r.rent ? r.rent + " / month" : "Rent not set"}</b></p><p>Roommates: ${occ(r).filter((x) => x.id != st.id).map((x) => esc(x.name)).join(", ") || "none yet"}</p>` : '<p class="mu">No room allocated yet. The manager will assign one.</p>'}</div>
+    <div class="card"><h2>Fee status</h2>${!st.feeTotal ? badge("Not set") : due <= 0 ? badge("Paid", "ok") : badge("Pending", "w")}<p>Total: <b>${st.feeTotal || 0}</b><br>Paid: <b>${st.feePaid || 0}</b><br>Due: <b>${Math.max(due, 0)}</b></p></div>
+    <div class="card"><h2>Attendance</h2><div class="big">${pc}%</div><div class="bar"><i style="width:${pc}%"></i></div><p class="mu">${pr} present of ${rec.length} days</p>${rec.slice(0, 5).map((a) => `<div class="row"><div class="f">${a.date}</div>${badge(a.status == "P" ? "Present" : "Absent", a.status == "P" ? "ok" : "bad")}</div>`).join("")}</div></div>`;
+  }
+  if (view == "rooms") b = `<div class="card"><h2>Room availability</h2>${roomList()}</div>`;
+  if (view == "comp") {
+    const mine = S.complaints.filter((c) => c.sid == st.id).sort((a, b2) => b2.ts - a.ts);
+    b = `<div class="card"><h2>New complaint</h2><form onsubmit="addC(event)"><select name="cat"><option>Maintenance</option><option>Food / Mess</option><option>Cleanliness</option><option>Electricity / Water</option><option>Other</option></select><textarea name="text" rows="3" placeholder="Describe the issue" required></textarea><button>Submit</button></form></div><div class="card"><h2>My complaints</h2>${mine.map((c) => `<div class="row"><div class="f"><b>${esc(c.cat)}</b> <span class="mu">${fmt(c.ts)}</span><br>${esc(c.text)}${c.reply ? '<br><span class="mu">Manager: ' + esc(c.reply) + "</span>" : ""}</div>${badge(c.status, stat(c.status))}</div>`).join("") || '<p class="mu">No complaints filed.</p>'}</div>`;
+  }
+  if (view == "notice") b = `<div class="card"><h2>Notices</h2>${noticeList()}</div>`;
+  if (view == "rules") b = `<div class="card"><h2>Hostel rules</h2><div class="pre">${esc(S.cfg.rules)}</div></div>`;
+  if (view == "myroom") b = myRoomView(st);
+  if (view == "profile") b = profileView(st);
+  if (view == "fees") b = feesView(st);
+  if (view == "leave") b = leaveView(st);
+  if (view == "home") b += homeExtra(st);
+  if (view == "mess") b = messView();
+  if (view == "visits") b = visitsView(st);
+  if (view == "rreq") b = rreqView(st);
+  if (view == "rules") b += contactsCard();
+  return shell(tabs, b);
+}
+const noticeList = (m) => notices().map((n) => `<div class="row"><div class="f"><b>${esc(n.title)}</b> <span class="mu">${fmt(n.ts)}</span><br><span class="pre">${esc(n.body)}</span></div>${m ? `<button class="d s" onclick="del('notices/${n.id}')">Delete</button>` : ""}</div>`).join("") || '<p class="mu">No notices.</p>';
+function addC(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target), st = S.students.find((s) => s.id == me.id);
+    if (yield add("complaints", { sid: st.id, name: st.name, room: st.room || "", cat: f.cat, text: f.text.trim(), status: "Open", ts: Date.now() })) {
+      toast("Complaint submitted");
+      ev.target.reset();
+    }
+  });
+}
+function mgr() {
+  const tabs = [["dash", "Dashboard"], ["students", "Students"], ["rooms", "Rooms"], ["leaves", "Leaves"], ["rreq", "Room Requests"], ["visits", "Visitors"], ["mess", "Mess Menu"], ["db", "Database"], ["fees", "Fees"], ["comp", "Complaints"], ["att", "Attendance"], ["notice", "Notices"], ["rules", "Rules & Settings"]];
+  let b = "";
+  if (view == "students") {
+    const e = S.students.find((s) => s.id == edit);
+    b = `<div class="card"><h2>${e ? "Edit student" : "Add student"}</h2>${regForm(e)}</div><div class="card"><h2>Students (${S.students.length})</h2><input id="q" placeholder="Search name, ID, course, room\u2026" value="${esc(q)}" oninput="srch(this.value)">${S.students.filter(sf).map((s) => `<div class="row"><div class="f"><b>${esc(s.name)}</b><br><span class="mu">${esc(s.id)} \xB7 ${esc(s.course)} \xB7 ${esc(s.phone)}${s.guardian ? "<br>Guardian: " + esc(s.guardian) + " " + esc(s.gphone || "") : ""}</span></div>${badge(s.room ? rinfo(s.room) : "No room")}<button class="g s" onclick="edit='${s.id}';render();scrollTo(0,0)">Edit</button><button class="d s" onclick="delS('${s.id}')">Delete</button></div>`).join("") || '<p class="mu">No students yet.</p>'}</div>`;
+  }
+  if (view == "rooms") {
+    b = `<div class="grid">${roomForm(S.rooms.find((r) => r.id == edit))}
+    <div class="card"><h2>Allocate room</h2><form onsubmit="alloc(event)"><select name="sid" required><option value="">Student\u2026</option>${S.students.map((s) => `<option value="${s.id}">${esc(s.name)} ${s.room ? "(Room " + esc(s.room) + ")" : ""}</option>`).join("")}</select><select name="rid" required><option value="">Room\u2026</option>${S.rooms.filter((r) => free(r) > 0).map((r) => `<option value="${r.id}">Room ${esc(r.id)} \xB7 Floor ${esc(r.floor || "\u2013")} \xB7 ${r.rent || 0}/mo \xB7 ${free(r)} free</option>`).join("")}</select><button>Allocate</button></form></div></div>
+    <div class="card"><h2>Rooms</h2>${S.rooms.map((r) => `<div class="row"><div class="f"><b>Room ${esc(r.id)}</b> <span class="mu">${esc(r.type)} \xB7 ${occ(r).length}/${r.cap} \xB7 Floor ${esc(r.floor || "\u2013")}${r.rent ? " \xB7 " + r.rent + "/mo" : ""}</span><br>${occ(r).map((s) => occCtl(s, r)).join("") || '<span class="mu">Empty</span>'}</div>${free(r) > 0 ? badge(free(r) + " free", "ok") : badge("Full", "bad")}<button class="g s" onclick="edit='${r.id}';render();goForm()">Edit</button><button class="d s" onclick="delR('${r.id}')">Delete</button></div>`).join("") || '<p class="mu">No rooms yet.</p>'}</div>`;
+  }
+  if (view == "fees") b = `<div class="card"><h2>Set fee for all students</h2><form class="row" onsubmit="feeAll(event)"><input name="amt" type="number" min="0" placeholder="Total fee" required><button>Apply</button></form></div><div class="card"><h2>Fee tracking</h2>${S.students.map((s) => {
+    const d = (s.feeTotal || 0) - (s.feePaid || 0);
+    return `<div class="row"><div class="f"><b>${esc(s.name)}</b><br><span class="mu">Paid ${s.feePaid || 0} of ${s.feeTotal || 0}</span></div>${!s.feeTotal ? badge("Not set") : d <= 0 ? badge("Paid", "ok") : badge("Due " + d, "w")}<input type="number" min="0" id="p${s.id}" placeholder="Amount"><button class="s" onclick="pay('${s.id}')">+ Payment</button><button class="g s" onclick="setTot('${s.id}')">Set total</button></div>`;
+  }).join("") || '<p class="mu">No students.</p>'}</div>`;
+  if (view == "comp") b = `<div class="card"><h2>Complaints</h2>${[...S.complaints].sort((a, b2) => b2.ts - a.ts).map((c) => `<div class="row"><div class="f"><b>${esc(c.cat)}</b> <span class="mu">${esc(c.name)} \xB7 Room ${esc(c.room || "\u2013")} \xB7 ${fmt(c.ts)}</span><br>${esc(c.text)}<br><input placeholder="Reply to student\u2026" value="${esc(c.reply)}" onchange="put('complaints/${c.id}',{reply:this.value},1)" style="width:100%;margin-top:6px"></div><select onchange="put('complaints/${c.id}',{status:this.value},1)">${["Open", "In Progress", "Resolved"].map((x) => `<option ${x == c.status ? "selected" : ""}>${x}</option>`).join("")}</select><button class="d s" onclick="del('complaints/${c.id}')">Delete</button></div>`).join("") || '<p class="mu">No complaints.</p>'}</div>`;
+  if (view == "att") {
+    const m = Object.fromEntries(S.att.filter((a) => a.date == adate).map((a) => [a.sid, a.status]));
+    b = `<div class="card"><h2>Attendance</h2><div class="row"><input type="date" value="${adate}" onchange="adate=this.value;render()"><button class="g s" onclick="markAll()">Mark all present</button></div>${S.students.map((s) => `<div class="row"><div class="f"><b>${esc(s.name)}</b> <span class="mu">${s.room ? "Room " + esc(s.room) : ""}</span></div><button class="s ${m[s.id] == "P" ? "" : "g"}" onclick="mark('${s.id}','P')">Present</button><button class="s ${m[s.id] == "A" ? "" : "g"}" style="${m[s.id] == "A" ? "background:var(--bad)" : ""}" onclick="mark('${s.id}','A')">Absent</button></div>`).join("") || '<p class="mu">No students.</p>'}</div>`;
+  }
+  if (view == "notice") b = `<div class="card"><h2>Post notice</h2><form onsubmit="addN(event)"><input name="title" placeholder="Title" required><textarea name="body" rows="3" placeholder="Message" required></textarea><button>Publish</button></form></div><div class="card"><h2>Notices</h2>${noticeList(1)}</div>`;
+  if (view == "rules") b = `<div class="card"><h2>Hostel rules</h2><form onsubmit="saveRules(event)"><textarea name="rules" rows="9">${esc(S.cfg.rules)}</textarea><button>Save rules</button></form></div><div class="card"><h2>Manager login</h2><form onsubmit="saveCred(event)"><input name="u" value="${esc(S.cfg.mgrUser)}" required><input name="pw" type="password" placeholder="New password" minlength="4" required><button>Update login</button></form></div>`;
+  if (view == "dash") b = dashView();
+  if (view == "leaves") b = mLeaves();
+  if (view == "db") b = dbView2();
+  if (view == "mess") b = messEdit();
+  if (view == "rreq") b = mRreq();
+  if (view == "visits") b = mVisits();
+  if (view == "att") b += attReport();
+  if (view == "rules") b += contactsEdit();
+  return shell(tabs, b);
+}
+function saveS(ev, eid, isReg) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target), id = eid || clean(f.id);
+    if (!id) return toast("Enter a valid ID");
+    const d = { name: f.name.trim(), course: f.course.trim(), phone: f.phone.trim() };
+    if (eid) {
+      if (f.pw) d.pw = yield h(f.pw);
+      if (yield put("students/" + id, d, 1)) {
+        edit = null;
+        toast("Saved");
+        render();
+      }
+      return;
+    }
+    if (S.students.find((s) => s.id == id)) return toast("That ID is already registered");
+    Object.assign(d, { id, pw: yield h(f.pw), room: "", feeTotal: 0, feePaid: 0, ts: Date.now() });
+    if (yield put("students/" + id, d)) {
+      toast(isReg ? "Registered! You can log in now" : "Student added");
+      if (isReg) scr = "slogin";
+      render();
+    }
+  });
+}
+function delS(id) {
+  return __async(this, null, function* () {
+    if (yield del("students/" + id)) toast("Student removed");
+  });
+}
+function addR(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target), id = clean(f.no);
+    if (!id) return toast("Invalid room number");
+    if (S.rooms.find((r) => r.id == id)) return toast("Room already exists");
+    if (yield put("rooms/" + id, { type: f.type.trim(), cap: +f.cap })) ev.target.reset();
+  });
+}
+function delR(id) {
+  return __async(this, null, function* () {
+    const r = S.rooms.find((x) => x.id == id);
+    if (occ(r).length) return toast("Remove occupants first");
+    if (yield del("rooms/" + id)) toast("Room deleted");
+  });
+}
+function alloc(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target), r = S.rooms.find((x) => x.id == f.rid);
+    if (!r || free(r) < 1) return toast("Room is full");
+    if (yield put("students/" + f.sid, { room: f.rid }, 1)) toast("Room allocated");
+  });
+}
+const unalloc = (id) => __async(null, null, function* () {
+  if (yield put("students/" + id, { room: "" }, 1)) toast("Student removed from room");
+});
+function feeAll(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const a = +fd(ev.target).amt;
+    for (const s of S.students) yield put("students/" + s.id, { feeTotal: a }, 1);
+    toast("Fee set for all");
+  });
+}
+function pay(id) {
+  return __async(this, null, function* () {
+    const v = +document.getElementById("p" + id).value, s = S.students.find((x) => x.id == id);
+    if (!(v > 0)) return toast("Enter an amount");
+    if (yield put("students/" + id, { feePaid: (s.feePaid || 0) + v }, 1)) {
+      yield add("payments", { sid: id, name: s.name, amt: v, ts: Date.now() });
+      toast("Payment recorded");
+    }
+  });
+}
+function setTot(id) {
+  return __async(this, null, function* () {
+    const v = +document.getElementById("p" + id).value;
+    if (!(v >= 0) || document.getElementById("p" + id).value === "") return toast("Enter the total");
+    if (yield put("students/" + id, { feeTotal: v }, 1)) toast("Total updated");
+  });
+}
+const mark = (sid, st, q2) => __async(null, null, function* () {
+  var _a;
+  if ((yield put(`att/${adate}_${sid}`, { sid, date: adate, status: st })) && !q2) toast((((_a = S.students.find((s) => s.id == sid)) == null ? void 0 : _a.name) || sid) + " marked " + (st == "P" ? "present" : "absent"));
+});
+function markAll() {
+  return __async(this, null, function* () {
+    for (const s of S.students) yield mark(s.id, "P", 1);
+    toast("All students marked present");
+  });
+}
+function addN(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target);
+    if (yield add("notices", { title: f.title.trim(), body: f.body.trim(), ts: Date.now() })) {
+      ev.target.reset();
+      toast("Notice published");
+    }
+  });
+}
+function saveRules(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    if (yield put("settings/main", { rules: fd(ev.target).rules }, 1)) toast("Rules saved");
+  });
+}
+function saveCred(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target);
+    if (yield put("settings/main", { mgrUser: f.u.trim(), mgrPass: yield h(f.pw) }, 1)) {
+      toast("Login updated");
+      ev.target.reset();
+    }
+  });
+}
+let q = "";
+const sf = (s) => !q || (s.name + " " + s.id + " " + s.course + " " + s.room).toLowerCase().includes(q.toLowerCase());
+function srch(v) {
+  q = v;
+  dirty = 0;
+  A.innerHTML = mgr();
+  const e = document.getElementById("q");
+  e.focus();
+  e.setSelectionRange(v.length, v.length);
+}
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const fld = (l, n, v, t = "text") => `<label class="mu">${l}</label><input name="${n}" type="${t}" value="${esc(v)}">`;
+function myRoomView(st) {
+  const r = S.rooms.find((x) => x.id == st.room);
+  if (!r) return '<div class="card"><h2>My room</h2><p class="mu">No room allocated yet. Check the Availability tab and contact the manager.</p></div>';
+  const mates = occ(r).filter((x) => x.id != st.id), am = (r.amenities || "").split(",").map((x) => x.trim()).filter(Boolean), mine = S.complaints.filter((c) => c.room == r.id && c.status != "Resolved").length;
+  return `<div class="card"><div class="big">Room ${esc(r.id)}</div><p class="mu">${esc(r.type)}</p><div class="grid"><div><span class="mu">Floor</span><br><b>${esc(r.floor || "\u2013")}</b></div><div><span class="mu">Beds</span><br><b>${r.cap} (${free(r)} free)</b></div><div><span class="mu">Monthly rent</span><br><b>${r.rent || "\u2013"}</b></div><div><span class="mu">Open issues</span><br><b>${mine}</b></div></div></div><div class="card"><h2>Amenities</h2>${am.map((x) => badge(esc(x))).join(" ") || '<p class="mu">Not listed.</p>'}</div><div class="card"><h2>My allocation</h2><div class="grid"><div><span class="mu">Bed</span><br><b>${esc(st.bed || "\u2013")}</b></div><div><span class="mu">Check-in date</span><br><b>${esc(st.checkIn || "\u2013")}</b></div><div><span class="mu">Security deposit</span><br><b>${st.deposit || "\u2013"}</b></div><div><span class="mu">Key no.</span><br><b>${esc(st.key || "\u2013")}</b></div></div></div><div class="card"><h2>Room info</h2><div class="grid"><div><span class="mu">Condition</span><br><b>${esc(r.condition || "\u2013")}</b></div><div><span class="mu">Last cleaned</span><br><b>${esc(r.lastCleaned || "\u2013")}</b></div><div><span class="mu">Electricity meter</span><br><b>${esc(r.meter || "\u2013")}</b></div><div><span class="mu">Wi-Fi network</span><br><b>${esc(r.wifi || "\u2013")}</b></div></div>${r.notes ? '<p class="mu">' + esc(r.notes) + "</p>" : ""}</div><div class="card"><h2>Room inventory</h2>${(r.items || "").split(",").map((x) => x.trim()).filter(Boolean).map((x) => badge(esc(x))).join(" ") || '<p class="mu">Not listed.</p>'}</div><div class="card"><h2>Roommates</h2>${mates.map((m) => `<div class="row"><div class="f"><b>${esc(m.name)}</b>${m.bed ? ' <span class="mu">\xB7 Bed ' + esc(m.bed) + "</span>" : ""}<br><span class="mu">${esc(m.course)} \xB7 ${esc(m.phone)}</span></div></div>`).join("") || '<p class="mu">You have the room to yourself.</p>'}</div><div class="card"><h2>Need something fixed?</h2><button onclick="go('comp')">Report an issue</button></div>`;
+}
+function profileView(st) {
+  return `<div class="card"><div class="big">${esc(st.name)}</div><p class="mu">ID ${esc(st.id)} \xB7 ${st.room ? "Room " + esc(st.room) : "No room yet"}</p></div><div class="card"><h2>Edit profile</h2><form onsubmit="saveProf(event)">${fld("Full name", "name", st.name)}${fld("Course / Year", "course", st.course)}${fld("Phone", "phone", st.phone)}${fld("Email", "email", st.email, "email")}<label class="mu">Home address</label><textarea name="address" rows="2">${esc(st.address)}</textarea>${fld("Father name", "fatherName", st.fatherName)}${fld("Father phone", "fatherPhone", st.fatherPhone)}${fld("Mother name", "motherName", st.motherName)}${fld("Mother phone", "motherPhone", st.motherPhone)}${fld("Emergency contact name", "guardian", st.guardian)}${fld("Emergency contact phone", "gphone", st.gphone)}<button>Save profile</button></form></div><div class="card"><h2>Change password</h2><form onsubmit="chPw(event)"><input type="password" name="old" placeholder="Current password" required><input type="password" name="n" placeholder="New password" minlength="4" required><button>Update password</button></form></div>`;
+}
+function feesView(st) {
+  const t = st.feeTotal || 0, p = st.feePaid || 0, d = Math.max(t - p, 0), pc = t ? Math.min(100, Math.round(p * 100 / t)) : 0, ps = S.pays.filter((x) => x.sid == st.id).sort((a, b) => b.ts - a.ts);
+  return `<div class="card"><h2>Fee status</h2>${!t ? badge("Not set") : d <= 0 ? badge("Paid", "ok") : badge("Pending", "w")}<div class="bar"><i style="width:${pc}%"></i></div><p>Total <b>${t}</b> \xB7 Paid <b>${p}</b> \xB7 Due <b>${d}</b></p></div>${feeBreak(st)}<div class="card"><h2>Payment history</h2>${ps.map((x) => `<div class="row"><div class="f">${fmt(x.ts)}<br><span class="mu">${esc(x.method || "")}${x.rcpt ? " \xB7 Receipt " + esc(x.rcpt) : ""}${x.note ? "<br>" + esc(x.note) : ""}</span></div><b>${x.amt}</b></div>`).join("") || '<p class="mu">No payments recorded.</p>'}</div>`;
+}
+const lst = (s) => badge(s, { Approved: "ok", Rejected: "bad", Pending: "w" }[s]);
+function leaveView(st) {
+  const m = S.leaves.filter((l) => l.sid == st.id).sort((a, b) => b.ts - a.ts);
+  return `<div class="card"><h2>Apply for leave</h2><form onsubmit="addL(event)"><label class="mu">From</label><input type="date" name="from" required><label class="mu">To</label><input type="date" name="to" required><textarea name="reason" rows="2" placeholder="Reason / destination" required></textarea><button>Submit request</button></form></div><div class="card"><h2>My requests</h2>${m.map((l) => `<div class="row"><div class="f"><b>${l.from} \u2192 ${l.to}</b><br>${esc(l.reason)}</div>${lst(l.status)}</div>`).join("") || '<p class="mu">No requests yet.</p>'}</div>`;
+}
+function messView() {
+  const m = S.mess || {};
+  return `<div class="card"><h2>Weekly mess menu</h2>${DAYS.map((d) => {
+    const x = m[d] || {};
+    return `<div class="row"><div class="f"><b>${d}</b></div><div style="flex:3;min-width:220px">\u{1F305} ${esc(x.b || "\u2013")}<br>\u{1F35B} ${esc(x.l || "\u2013")}<br>\u{1F319} ${esc(x.d || "\u2013")}</div></div>`;
+  }).join("")}</div>`;
+}
+function messEdit() {
+  const m = S.mess || {};
+  return `<div class="card"><h2>Edit mess menu</h2><form onsubmit="saveMess(event)">${DAYS.map((d) => {
+    const x = m[d] || {};
+    return `<b>${d}</b><input name="${d}b" placeholder="Breakfast" value="${esc(x.b)}"><input name="${d}l" placeholder="Lunch" value="${esc(x.l)}"><input name="${d}d" placeholder="Dinner" value="${esc(x.d)}">`;
+  }).join("")}<button>Save menu</button></form></div>`;
+}
+function mLeaves() {
+  return `<div class="card"><h2>Leave requests</h2>${[...S.leaves].sort((a, b) => b.ts - a.ts).map((l) => `<div class="row"><div class="f"><b>${esc(l.name)}</b> <span class="mu">Room ${esc(l.room || "\u2013")}</span><br>${l.from} \u2192 ${l.to}<br>${esc(l.reason)}</div>${lst(l.status)}<button class="s" onclick="put('leaves/${l.id}',{status:'Approved'},1)">Approve</button><button class="d s" onclick="put('leaves/${l.id}',{status:'Rejected'},1)">Reject</button></div>`).join("") || '<p class="mu">No requests.</p>'}</div>`;
+}
+function dashView() {
+  const beds = S.rooms.reduce((a, r) => a + r.cap, 0), used = S.students.filter((s) => S.rooms.find((r) => r.id == s.room)).length, tot = S.students.reduce((a, s) => a + (s.feeTotal || 0), 0), paid = S.students.reduce((a, s) => a + (s.feePaid || 0), 0), td = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10), pres = S.att.filter((a) => a.date == td && a.status == "P").length, oc = S.complaints.filter((c) => c.status != "Resolved").length, pl = S.leaves.filter((l) => l.status == "Pending").length, dues = S.students.map((s) => ({ s, d: (s.feeTotal || 0) - (s.feePaid || 0) })).filter((x) => x.d > 0).sort((a, b) => b.d - a.d).slice(0, 5), n = notices()[0];
+  const k = (v, l, g) => `<div class="card" style="cursor:pointer" onclick="go('${g}')"><div class="big">${v}</div><div class="mu">${l}</div></div>`;
+  return `<div class="grid">${k(S.students.length, "Students", "students")}${k(used + " / " + beds, "Beds occupied", "rooms")}${k(paid + " / " + tot, "Fees collected", "fees")}${k(oc, "Open complaints", "comp")}${k(pl, "Pending leave requests", "leaves")}${k(pres, "Present today", "att")}</div><div class="card"><h2>Highest fee dues</h2>${dues.map((x) => `<div class="row"><div class="f">${esc(x.s.name)}</div>${badge("Due " + x.d, "w")}</div>`).join("") || '<p class="mu">No pending dues.</p>'}</div><div class="card"><h2>Latest notice</h2>${n ? `<b>${esc(n.title)}</b><p class="pre">${esc(n.body)}</p>` : '<p class="mu">None.</p>'}</div>`;
+}
+function roomForm(r) {
+  return `<div class="card" id="roomform"><h2>${r ? "Edit room " + esc(r.id) : "Add room"}</h2><form onsubmit="saveR(event,'${r ? r.id : ""}')"><input name="no" placeholder="Room number" required value="${esc(r == null ? void 0 : r.id)}" ${r ? "readonly" : ""}><input name="type" placeholder="Type (e.g. Double, AC)" required value="${esc(r == null ? void 0 : r.type)}"><input name="cap" type="number" min="1" max="12" placeholder="Beds" required value="${esc(r == null ? void 0 : r.cap)}"><input name="floor" placeholder="Floor" value="${esc(r == null ? void 0 : r.floor)}"><input name="rent" type="number" min="0" placeholder="Monthly rent" value="${esc(r == null ? void 0 : r.rent)}"><input name="amenities" placeholder="Amenities, comma separated" value="${esc(r == null ? void 0 : r.amenities)}"><button>${r ? "Save" : "Add room"}</button>${r ? ` <button type="button" class="g" onclick="go('rooms')">Cancel</button>` : ""}</form></div>`;
+}
+function saveR(ev, eid) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target), id = eid || clean(f.no);
+    if (!id) return toast("Invalid room number");
+    const cap = +f.cap, d = { type: f.type.trim(), cap, floor: f.floor.trim(), rent: +f.rent || 0, amenities: f.amenities.trim() };
+    if (eid) {
+      if (cap < occ(S.rooms.find((x) => x.id == eid)).length) return toast("Fewer beds than current occupants");
+      if (yield put("rooms/" + id, d, 1)) {
+        edit = null;
+        toast("Room updated");
+        render();
+      }
+      return;
+    }
+    if (S.rooms.find((r) => r.id == id)) return toast("Room already exists");
+    if (yield put("rooms/" + id, d)) {
+      ev.target.reset();
+      toast("Room added");
+    }
+  });
+}
+function saveProf(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target), d = {};
+    ["name", "course", "phone", "email", "address", "guardian", "gphone", "fatherName", "fatherPhone", "motherName", "motherPhone"].forEach((k) => d[k] = (f[k] || "").trim());
+    if (yield put("students/" + me.id, d, 1)) {
+      me.name = d.name;
+      try {
+        sessionStorage.setItem("hh", JSON.stringify(me));
+      } catch (e) {
+      }
+      toast("Profile saved");
+      dirty = 0;
+      render();
+    }
+  });
+}
+function chPw(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target), st = S.students.find((s) => s.id == me.id);
+    if (st.pw != (yield h(f.old))) return toast("Current password is wrong");
+    if (yield put("students/" + me.id, { pw: yield h(f.n) }, 1)) {
+      toast("Password updated");
+      ev.target.reset();
+    }
+  });
+}
+function addL(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target);
+    if (f.to < f.from) return toast("End date is before start date");
+    const st = S.students.find((s) => s.id == me.id);
+    if (yield add("leaves", { sid: st.id, name: st.name, room: st.room || "", from: f.from, to: f.to, reason: f.reason.trim(), status: "Pending", ts: Date.now() })) {
+      ev.target.reset();
+      toast("Request sent");
+    }
+  });
+}
+function saveMess(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target), o = {};
+    DAYS.forEach((d) => o[d] = { b: f[d + "b"], l: f[d + "l"], d: f[d + "d"] });
+    if (yield put("settings/mess", o)) toast("Menu saved");
+  });
+}
+const tm = (t) => new Date(t).toLocaleString(void 0, { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
+const CK = [["warden", "Warden"], ["security", "Security desk"], ["medical", "Medical / first aid"], ["ambulance", "Ambulance"]];
+function visitsView(st) {
+  const v = S.visits.filter((x) => x.sid == st.id).sort((a, b) => b.inAt - a.inAt);
+  return `<div class="grid">${visStats(st)}</div><div class="card"><h2>Visitors</h2>${v.map((x) => `<div class="row"><div class="f"><b>${esc(x.visitor)}</b> <span class="mu">${esc(x.relation)}</span><br><span class="mu">${x.purpose ? esc(x.purpose) + " \xB7 " : ""}${x.phone ? esc(x.phone) : ""}<br>In ${tm(x.inAt)}${x.outAt ? " \xB7 Out " + tm(x.outAt) : ""}</span></div>${badge(x.outAt ? "Left" : "Inside", x.outAt ? "" : "ok")}</div>`).join("") || '<p class="mu">No visitors logged.</p>'}</div>`;
+}
+function mVisits() {
+  return `<div class="card"><h2>Log visitor</h2><form onsubmit="addV(event)"><select name="sid" required><option value="">Student visited\u2026</option>${S.students.map((s) => `<option value="${s.id}">${esc(s.name)}</option>`).join("")}</select><input name="visitor" placeholder="Visitor name" required><input name="relation" placeholder="Relation (e.g. Parent)" required><input name="phone" placeholder="Phone"><input name="purpose" placeholder="Purpose of visit"><button>Check in</button></form></div><div class="card"><h2>Visitor log</h2>${[...S.visits].sort((a, b) => b.inAt - a.inAt).map((x) => `<div class="row"><div class="f"><b>${esc(x.visitor)}</b> <span class="mu">${esc(x.relation)} \xB7 for ${esc(x.name)}</span><br><span class="mu">In ${tm(x.inAt)}${x.outAt ? " \xB7 Out " + tm(x.outAt) : ""}</span></div>${x.outAt ? badge("Left") : `<button class="s" onclick="put('visitors/${x.id}',{outAt:Date.now()},1)">Check out</button>`}</div>`).join("") || '<p class="mu">No visitors yet.</p>'}</div>`;
+}
+function addV(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target), s = S.students.find((x) => x.id == f.sid);
+    if (yield add("visitors", { sid: s.id, name: s.name, visitor: f.visitor.trim(), relation: f.relation.trim(), phone: f.phone.trim(), purpose: (f.purpose || "").trim(), inAt: Date.now(), outAt: 0 })) {
+      ev.target.reset();
+      toast("Visitor checked in");
+    }
+  });
+}
+function rreqView(st) {
+  const m = S.rreqs.filter((x) => x.sid == st.id).sort((a, b) => b.ts - a.ts);
+  return `<div class="card"><h2>Request a room change</h2><p class="mu">Current room: ${st.room ? esc(st.room) : "none"}</p><form onsubmit="addRR(event)"><select name="to" required><option value="">Preferred room\u2026</option>${S.rooms.filter((r) => r.id != st.room && free(r) > 0).map((r) => `<option value="${r.id}">Room ${esc(r.id)} \xB7 ${esc(r.type)} \xB7 Floor ${esc(r.floor || "\u2013")} \xB7 ${r.rent || 0}/mo \xB7 ${free(r)} free</option>`).join("")}</select><textarea name="reason" rows="2" placeholder="Reason" required></textarea><button>Submit request</button></form></div><div class="card"><h2>My requests</h2>${m.map((x) => `<div class="row"><div class="f"><b>${x.from ? "Room " + esc(x.from) : "No room"} \u2192 Room ${esc(x.to)}</b><br>${esc(x.reason)}</div>${lst(x.status)}</div>`).join("") || '<p class="mu">No requests.</p>'}</div>`;
+}
+function addRR(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target), st = S.students.find((s) => s.id == me.id);
+    if (yield add("roomreq", { sid: st.id, name: st.name, from: st.room || "", to: f.to, reason: f.reason.trim(), status: "Pending", ts: Date.now() })) {
+      ev.target.reset();
+      toast("Request sent");
+    }
+  });
+}
+function mRreq() {
+  return `<div class="card"><h2>Room change requests</h2>${[...S.rreqs].sort((a, b) => b.ts - a.ts).map((x) => `<div class="row"><div class="f"><b>${esc(x.name)}</b> <span class="mu">${x.from ? "Room " + esc(x.from) : "No room"} \u2192 Room ${esc(x.to)}</span><br>${esc(x.reason)}</div>${lst(x.status)}${x.status == "Pending" ? `<button class="s" onclick="apprRR('${x.id}')">Approve</button><button class="d s" onclick="put('roomreq/${x.id}',{status:'Rejected'},1)">Reject</button>` : ""}</div>`).join("") || '<p class="mu">No requests.</p>'}</div>`;
+}
+function apprRR(id) {
+  return __async(this, null, function* () {
+    const x = S.rreqs.find((r2) => r2.id == id), r = S.rooms.find((r2) => r2.id == x.to);
+    if (!r || free(r) < 1) return toast("Target room is full");
+    if (yield put("students/" + x.sid, { room: x.to }, 1)) {
+      yield put("roomreq/" + id, { status: "Approved" }, 1);
+      toast("Approved and room reassigned");
+    }
+  });
+}
+function contactsCard() {
+  const c = S.contacts || {};
+  return `<div class="card"><h2>Emergency contacts</h2>${CK.map(([k, l]) => c[k] ? `<div class="row"><div class="f">${l}</div><b>${esc(c[k])}</b></div>` : "").join("") || '<p class="mu">Not added yet.</p>'}</div>`;
+}
+function contactsEdit() {
+  const c = S.contacts || {};
+  return `<div class="card"><h2>Emergency contacts</h2><form onsubmit="saveCon(event)">${CK.map(([k, l]) => fld(l, k, c[k])).join("")}<button>Save contacts</button></form></div>`;
+}
+function saveCon(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    if (yield put("settings/contacts", fd(ev.target))) toast("Contacts saved");
+  });
+}
+function attReport() {
+  const rows = S.students.map((s) => {
+    const r = S.att.filter((a) => a.sid == s.id), p = r.filter((a) => a.status == "P").length;
+    return { s, n: r.length, pc: r.length ? Math.round(p * 100 / r.length) : 0 };
+  }).filter((x) => x.n);
+  return `<div class="card"><h2>Attendance summary</h2>${rows.map((x) => `<div class="row"><div class="f"><b>${esc(x.s.name)}</b><div class="bar"><i style="width:${x.pc}%"></i></div></div>${badge(x.pc + "% of " + x.n + " days", x.pc < 75 ? "bad" : "ok")}</div>`).join("") || '<p class="mu">No records yet.</p>'}</div>`;
+}
+function visStats(st) {
+  const v = S.visits.filter((x) => x.sid == st.id).sort((a, b) => b.inAt - a.inAt), k = (n, l) => `<div class="card"><div class="big">${n}</div><div class="mu">${l}</div></div>`;
+  return k(v.length, "Total visits") + k(v.filter((x) => !x.outAt).length, "Inside now") + k(v[0] ? fmt(v[0].inAt) : "\u2013", "Last visit");
+}
+function feeBreak(st) {
+  const it = st.feeItems;
+  if (!it) return "";
+  return `<div class="card"><h2>Fee breakdown</h2>${[["rent", "Hostel rent"], ["mess", "Mess charges"], ["utilities", "Utilities"], ["maintenance", "Maintenance"]].map(([k, l]) => `<div class="row"><div class="f">${l}</div><b>${it[k] || 0}</b></div>`).join("")}${st.dueDate ? `<p class="mu">Next due date: <b>${esc(st.dueDate)}</b></p>` : ""}</div>`;
+}
+function homeExtra(st) {
+  const cp = S.complaints.filter((c) => c.sid == st.id && c.status != "Resolved").length, pl = S.leaves.filter((l) => l.sid == st.id && l.status == "Pending").length, vs = S.visits.filter((v) => v.sid == st.id).sort((a, b) => b.inAt - a.inAt), ps = S.pays.filter((p) => p.sid == st.id).sort((a, b) => b.ts - a.ts).slice(0, 3), ns = notices().slice(0, 2), due = Math.max((st.feeTotal || 0) - (st.feePaid || 0), 0);
+  const k = (v, l, g) => `<div class="card" style="cursor:pointer" onclick="go('${g}')"><div class="big">${v}</div><div class="mu">${l}</div></div>`;
+  return `<div class="grid">${k(due, "Fee due" + (st.dueDate && due ? " by " + esc(st.dueDate) : ""), "fees")}${k(cp, "Open complaints", "comp")}${k(pl, "Pending leave requests", "leave")}${k(vs.length, "Visitors logged", "visits")}</div><div class="grid"><div class="card"><h2>Latest notices</h2>${ns.map((n) => `<div class="row"><div class="f"><b>${esc(n.title)}</b><br><span class="mu">${fmt(n.ts)}</span></div></div>`).join("") || '<p class="mu">No notices.</p>'}</div><div class="card"><h2>Recent payments</h2>${ps.map((p) => `<div class="row"><div class="f">${fmt(p.ts)}</div><b>${p.amt}</b></div>`).join("") || '<p class="mu">None yet.</p>'}</div><div class="card"><h2>Recent visitors</h2>${vs.slice(0, 3).map((v) => `<div class="row"><div class="f"><b>${esc(v.visitor)}</b> <span class="mu">${esc(v.relation)}</span></div><span class="mu">${fmt(v.inAt)}</span></div>`).join("") || '<p class="mu">No visitors.</p>'}</div></div>`;
+}
+function rinfo(id) {
+  const r = S.rooms.find((x) => x.id == id);
+  return r ? "Room " + esc(r.id) + " \xB7 Floor " + esc(r.floor || "\u2013") + " \xB7 " + (r.rent || 0) + "/mo" : "Room " + esc(id);
+}
+const KEY = { students: "students", rooms: "rooms", complaints: "complaints", notices: "notices", att: "att", payments: "pays", leaves: "leaves", visitors: "visits", roomreq: "rreqs" };
+function patch(p, d, rm) {
+  const [c, id] = p.split("/");
+  if (c == "settings") {
+    const k = { main: "cfg", mess: "mess", contacts: "contacts" }[id];
+    if (k && !rm) S[k] = __spreadValues(__spreadValues({}, S[k]), d);
+    return;
+  }
+  const a = S[KEY[c]];
+  if (!a) return;
+  const i = a.findIndex((x) => x.id == id);
+  if (rm) {
+    if (i >= 0) a.splice(i, 1);
+  } else if (i >= 0) a[i] = __spreadValues(__spreadValues({}, a[i]), d);
+  else a.push(__spreadValues({ id }, d));
+}
+function settle() {
+  const a = document.activeElement;
+  if (a && /INPUT|TEXTAREA|SELECT/.test(a.tagName) && a.id != "q") a.blur();
+  dirty = 0;
+  render();
+}
+let dbc = "students";
+function dbView() {
+  const C = [["students", "students"], ["rooms", "rooms"], ["payments", "pays"], ["att", "att"], ["complaints", "complaints"], ["leaves", "leaves"], ["visitors", "visits"], ["roomreq", "rreqs"], ["notices", "notices"]], rows = [...S[C.find((x) => x[0] == dbc)[1]]].sort((a, b) => String(a.id).localeCompare(String(b.id), 0, { numeric: 1 })), cols = [...new Set(rows.flatMap((r) => Object.keys(r)))].filter((k) => k != "id"), cell = (k, v) => v == null ? "" : k == "pw" ? esc(String(v).slice(0, 10)) + "\u2026 (hashed)" : typeof v == "object" ? esc(JSON.stringify(v)) : esc(v), td = "padding:6px 10px;border-bottom:1px solid var(--bd);white-space:nowrap;text-align:left";
+  return `<div class="card"><h2>Database</h2><p class="mu">All app data is stored in this app's browser database (saved in this browser with localStorage). Each collection below works like a table and each record is a document with its own ID. Every change made in the app is saved here and shows up on every screen.</p><div class="grid">${C.map(([n, k]) => `<div class="card" style="cursor:pointer;${n == dbc ? "border-color:var(--pr);" : ""}" onclick="dbc='${n}';render()"><div class="big">${S[k].length}</div><div class="mu">${n}</div></div>`).join("")}</div></div><div class="card"><h2>${dbc} <span class="mu">(${rows.length} records)</span></h2><div style="overflow-x:auto"><table style="border-collapse:collapse;font-size:13px;min-width:100%"><tr><th style="${td}">id</th>${cols.map((c) => `<th style="${td}">${esc(c)}</th>`).join("")}</tr>${rows.map((r) => `<tr><td style="${td}"><b>${esc(r.id)}</b></td>${cols.map((c) => `<td style="${td}">${cell(c, r[c])}</td>`).join("")}</tr>`).join("")}</table></div></div>`;
+}
+let dq = "", dm = "table";
+const DBC = [["students", "students", "\u{1F465}"], ["rooms", "rooms", "\u{1F6CF}\uFE0F"], ["payments", "pays", "\u{1F4B3}"], ["att", "att", "\u{1F4C5}"], ["complaints", "complaints", "\u{1F6E0}\uFE0F"], ["leaves", "leaves", "\u{1F6AA}"], ["visitors", "visits", "\u{1F9D1}\u200D\u{1F91D}\u200D\u{1F9D1}"], ["roomreq", "rreqs", "\u{1F501}"], ["notices", "notices", "\u{1F4E2}"]];
+const REL = { students: "room \u2192 rooms.id", rooms: "referenced by students.room", payments: "sid \u2192 students.id", att: "sid \u2192 students.id", complaints: "sid \u2192 students.id", leaves: "sid \u2192 students.id", visitors: "sid \u2192 students.id", roomreq: "sid \u2192 students.id, to \u2192 rooms.id", notices: "standalone" };
+function dsrch(v) {
+  dq = v;
+  dirty = 0;
+  A.innerHTML = mgr();
+  const e = document.getElementById("dq");
+  e.focus();
+  e.setSelectionRange(v.length, v.length);
+}
+function dbView2() {
+  const cur = DBC.find((x) => x[0] == dbc) || DBC[0], all = [...S[cur[1]]].sort((a, b) => String(a.id).localeCompare(String(b.id), 0, { numeric: 1 })), total = DBC.reduce((a, x) => a + S[x[1]].length, 0), cols = [...new Set(all.flatMap((r) => Object.keys(r)))].filter((k) => k != "id"), rows = all.filter((r) => !dq || JSON.stringify(r).toLowerCase().includes(dq.toLowerCase())), ty = (k) => {
+    var _a;
+    const v = (_a = all.find((r) => r[k] != null)) == null ? void 0 : _a[k];
+    return v == null ? "\u2013" : Array.isArray(v) ? "array" : typeof v == "object" ? "map" : typeof v;
+  }, cell = (k, v) => v == null ? "" : k == "pw" ? esc(String(v).slice(0, 10)) + "\u2026 (hashed)" : typeof v == "object" ? esc(JSON.stringify(v)) : esc(v), mask = (r) => JSON.stringify(__spreadValues(__spreadValues({}, r), r.pw ? { pw: String(r.pw).slice(0, 10) + "\u2026" } : {}), null, 1);
+  return `<div class="card"><div class="row" style="border:0;padding:0"><div class="f"><h2 style="margin:0">\u{1F5C4}\uFE0F HostelHub Database</h2><span class="mu">Cloud document database \xB7 collections of records</span></div><span class="b ok">\u25CF Connected</span></div><div class="grid" style="margin-top:12px"><div><div class="big">${DBC.length}</div><span class="mu">Collections</span></div><div><div class="big">${total}</div><span class="mu">Total records</span></div><div><div class="big">Live</div><span class="mu">Changes sync instantly</span></div></div></div>
+<div class="card"><h2>Collections</h2><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))">${DBC.map(([n, k, i]) => `<div class="card chip ${n == dbc ? "on" : ""}" onclick="dbc='${n}';dq='';render()"><div style="font-size:20px">${i}</div><b>${n}</b><div class="mu">${S[k].length} records</div></div>`).join("")}</div></div>
+<div class="card"><h2>${cur[2]} ${cur[0]} <span class="mu">\xB7 structure</span></h2><p class="mu">Record ID is the primary key. Link: ${esc(REL[cur[0]])}</p><div>${["id", ...cols].map((c) => `<span class="b" style="display:inline-block;margin:0 4px 6px 0">${esc(c)}: ${c == "id" ? "string" : ty(c)}</span>`).join("")}</div></div>
+<div class="card"><div class="row" style="border:0;padding:0 0 10px"><div class="f"><h2 style="margin:0">Records <span class="mu">(${rows.length}${rows.length != all.length ? " of " + all.length : ""})</span></h2></div><button class="s ${dm == "table" ? "" : "g"}" onclick="dm='table';render()">Table</button><button class="s ${dm == "json" ? "" : "g"}" onclick="dm='json';render()">JSON</button></div><input id="dq" placeholder="Search records\u2026" value="${esc(dq)}" oninput="dsrch(this.value)">
+${dm == "table" ? `<div style="overflow:auto;max-height:60vh;border:1px solid var(--bd);border-radius:10px"><table class="dbt"><tr><th>id</th>${cols.map((c) => `<th>${esc(c)}</th>`).join("")}</tr>${rows.map((r) => `<tr><td><b>${esc(r.id)}</b></td>${cols.map((c) => `<td>${cell(c, r[c])}</td>`).join("")}</tr>`).join("")}</table></div>` : `<div style="max-height:60vh;overflow:auto">${rows.slice(0, 60).map((r) => `<pre class="dbj">${esc(cur[0] + "/" + r.id + " " + mask(r))}</pre>`).join("")}${rows.length > 60 ? '<p class="mu">Showing first 60 records. Use search to narrow down.</p>' : ""}</div>`}${rows.length ? "" : '<p class="mu">No matching records.</p>'}</div>`;
+}
+const wlogin = () => `<div class="login"><div class="big">\u{1F3E0} HostelHub</div><p class="mu">Warden login (records &amp; fees)</p><div class="card"><form onsubmit="doW(event)"><label class="mu">Username</label><input name="u" required autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="username"><label class="mu">Password</label><input name="pw" type="password" required><button style="width:100%">Log in</button></form><p class="mu">Demo login: <b>warden</b> / <b>warden123</b></p><p class="mu"><a class="l" onclick="nav('slogin')">\u2190 Student login</a> \xB7 <a class="l" onclick="nav('mlogin')">Manager login</a></p></div></div>`;
+function doW(ev) {
+  return __async(this, null, function* () {
+    ev.preventDefault();
+    const f = fd(ev.target);
+    if (S.cfg.wardenUser && f.u.trim().toLowerCase() == S.cfg.wardenUser.toLowerCase() && (yield pwOk(S.cfg.wardenPass, f.pw))) ok({ role: "w", name: "Warden" });
+    else toast("Wrong username or password");
+  });
+}
+let wq = "";
+function wsrch(v) {
+  wq = v;
+  dirty = 0;
+  A.innerHTML = wdn();
+  const e = document.getElementById("wq");
+  e.focus();
+  e.setSelectionRange(v.length, v.length);
+}
+const wf = (s) => !wq || JSON.stringify(s).toLowerCase().includes(wq.toLowerCase());
+const wsb = (ph) => `<input id="wq" placeholder="${ph}" value="${esc(wq)}" oninput="wsrch(this.value)">`;
+const kv = (l, v) => `<div><span class="mu">${l}</span><br><b>${esc(v || "\u2013")}</b></div>`;
+function wdn() {
+  const tabs = [["wlist", "Hostelers"], ["wfees", "Fees Paid"], ["wlog", "Payment Log"], ["wcomp", "Complaints"], ["notice", "Notices"], ["rooms", "Room Allocation"], ["att", "Attendance"]];
+  let b = "";
+  if (view == "wlist") b = wList();
+  if (view == "wfees") b = wFees();
+  if (view == "wlog") b = wLog();
+  if (view == "wcomp") b = wComp();
+  if (["notice", "rooms", "att"].includes(view)) b = (mgr().match(/<main>([\s\S]*)<\/main>/) || [0, ""])[1];
+  return shell(tabs, b);
+}
+function wList() {
+  const L = S.students.filter(wf).sort((a, b) => a.name.localeCompare(b.name));
+  return `<div class="card"><h2>Hosteler information (${S.students.length})</h2>${wsb("Search name, ID, room, parent, phone\u2026")}</div>${L.map((s) => `<div class="card"><div class="row" style="border:0;padding:0 0 8px"><div class="f"><b style="font-size:16px">${esc(s.name)}</b><br><span class="mu">ID ${esc(s.id)} \xB7 ${esc(s.course)}</span></div>${badge(s.room ? rinfo(s.room) : "No room", s.room ? "" : "w")}</div><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px">${kv("Phone", s.phone)}${kv("Email", s.email)}${kv("Father", s.fatherName)}${kv("Father phone", s.fatherPhone)}${kv("Mother", s.motherName)}${kv("Mother phone", s.motherPhone)}${kv("Emergency contact", (s.guardian || "") + (s.gphone ? " \xB7 " + s.gphone : ""))}${kv("Check-in date", s.checkIn)}</div><div style="margin-top:10px">${kv("Home address", s.address)}</div></div>`).join("") || '<div class="card"><p class="mu">No matching hostelers.</p></div>'}`;
+}
+function wFees() {
+  const t = S.students.reduce((a, s) => a + (s.feeTotal || 0), 0), p = S.students.reduce((a, s) => a + (s.feePaid || 0), 0), dd = (s) => (s.feeTotal || 0) - (s.feePaid || 0), L = S.students.filter(wf).sort((a, b) => dd(b) - dd(a)), k = (v, l) => `<div class="card"><div class="big">${v}</div><div class="mu">${l}</div></div>`;
+  return `<div class="grid">${k(t, "Total fees")}${k(p, "Collected")}${k(t - p, "Pending")}${k(t ? Math.round(p * 100 / t) + "%" : "\u2013", "Collection rate")}</div><div class="card"><h2>Fees paid by hosteler</h2>${wsb("Search hosteler\u2026")}${L.map((s) => {
+    const T = s.feeTotal || 0, P = s.feePaid || 0, d = T - P;
+    return `<div class="row"><div class="f"><b>${esc(s.name)}</b> <span class="mu">${esc(s.id)} \xB7 ${s.room ? "Room " + esc(s.room) : "No room"}</span><div class="bar"><i style="width:${T ? Math.min(100, Math.round(P * 100 / T)) : 0}%"></i></div><span class="mu">Paid ${P} of ${T}</span></div>${!T ? badge("Not set") : d <= 0 ? badge("Paid", "ok") : badge("Due " + d, "w")}</div>`;
+  }).join("")}</div>`;
+}
+function wLog() {
+  const L = [...S.pays].filter(wf).sort((a, b) => b.ts - a.ts), sum = L.reduce((a, p) => a + (p.amt || 0), 0);
+  return `<div class="card"><h2>Payment log</h2>${wsb("Search payments\u2026")}<p class="mu">${L.length} payments \xB7 total ${sum}</p>${L.map((p) => `<div class="row"><div class="f"><b>${esc(p.name)}</b> <span class="mu">${esc(p.sid)} \xB7 ${fmt(p.ts)}</span><br><span class="mu">${esc(p.method || "")}${p.rcpt ? " \xB7 " + esc(p.rcpt) : ""}${p.note ? " \xB7 " + esc(p.note) : ""}</span></div><b>${p.amt}</b></div>`).join("") || '<p class="mu">No payments.</p>'}</div>`;
+}
+let wcf = "all";
+const solve = (id, st) => put("complaints/" + id, { status: st, handledBy: "Warden", handledAt: Date.now() }, 1);
+function wComp() {
+  const C = S.complaints, n = (s) => C.filter((c) => c.status == s).length, L = [...C].filter((c) => wcf == "all" || (wcf == "open" ? c.status != "Resolved" : c.status == "Resolved")).filter(wf).sort((a, b) => b.ts - a.ts), k = (v, l) => `<div class="card"><div class="big">${v}</div><div class="mu">${l}</div></div>`, ch = (id, l) => `<button class="s ${wcf == id ? "" : "g"}" onclick="wcf='${id}';render()">${l}</button>`;
+  return `<div class="grid">${k(C.length, "Received")}${k(n("Open"), "Not solved")}${k(n("In Progress"), "In progress")}${k(n("Resolved"), "Solved")}</div><div class="card"><h2>Complaints received</h2><div class="row" style="border:0;padding:0 0 8px">${ch("all", "All")}${ch("open", "Not solved")}${ch("done", "Solved")}</div>${wsb("Search complaints\u2026")}${L.map((c) => `<div class="row"><div class="f"><b>${esc(c.cat)}</b> <span class="mu">${esc(c.name)} \xB7 Room ${esc(c.room || "\u2013")} \xB7 ${fmt(c.ts)}</span><br>${esc(c.text)}<input placeholder="Reply to student\u2026" value="${esc(c.reply)}" onchange="put('complaints/${c.id}',{reply:this.value},1)" style="width:100%;margin-top:6px"></div>${badge(c.status == "Resolved" ? "Solved \u2713" : c.status == "In Progress" ? "In progress" : "Not solved", stat(c.status))}<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="s" onclick="solve('${c.id}','Resolved')">Mark solved</button><button class="g s" onclick="solve('${c.id}','In Progress')">In progress</button><button class="d s" onclick="solve('${c.id}','Open')">Not solved</button></div></div>`).join("") || '<p class="mu">No complaints here.</p>'}</div>`;
+}
+const pwOk = (st, pw) => __async(null, null, function* () {
+  return st == (yield h(pw)) || st == (yield h(pw.trim()));
+});
+const goForm = () => setTimeout(() => {
+  const e = document.getElementById("roomform");
+  if (e) e.scrollIntoView({ behavior: "smooth", block: "start" });
+}, 50);
+function occCtl(s, r) {
+  const others = S.students.filter((x) => x.room !== r.id).sort((a, b) => a.name.localeCompare(b.name)), rms = S.rooms.filter((x) => x.id !== r.id && free(x) > 0);
+  return `<div style="margin-top:8px;padding:8px;border:1px solid var(--bd);border-radius:10px"><b>${esc(s.name)}</b> <span class="mu">${esc(s.id)}${s.bed ? " \xB7 Bed " + esc(s.bed) : ""}</span><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><select onchange="replOcc('${s.id}','${r.id}',this.value)"><option value="">Replace with\u2026</option>${others.map((x) => `<option value="${x.id}">${esc(x.name)} (${x.room ? "Room " + esc(x.room) : "no room"})</option>`).join("")}</select><select onchange="moveOcc('${s.id}',this.value)"><option value="">Move to\u2026</option>${rms.map((x) => `<option value="${x.id}">Room ${esc(x.id)} \xB7 ${free(x)} free</option>`).join("")}<option value="none">Unassign (no room)</option></select></div></div>`;
+}
+function replOcc(oldId, rid, newId) {
+  return __async(this, null, function* () {
+    if (!newId) return;
+    const n = S.students.find((x) => x.id == newId), o = S.students.find((x) => x.id == oldId);
+    if (!n || !o) return;
+    if (yield put("students/" + newId, { room: rid, bed: o.bed || "" }, 1)) {
+      yield put("students/" + oldId, { room: "", bed: "" }, 1);
+      toast(n.name + " now has Room " + rid + ". " + o.name + " is unassigned.");
+    }
+  });
+}
+function moveOcc(id, rid) {
+  return __async(this, null, function* () {
+    if (!rid) return;
+    const s = S.students.find((x) => x.id == id);
+    if (rid == "none") {
+      if (yield put("students/" + id, { room: "", bed: "" }, 1)) toast(s.name + " removed from room");
+      return;
+    }
+    const r = S.rooms.find((x) => x.id == rid);
+    if (!r || free(r) < 1) return toast("That room is full");
+    if (yield put("students/" + id, { room: rid, bed: "" }, 1)) toast(s.name + " moved to Room " + rid);
+  });
+}
+{
+  const h2 = location.hash.slice(1);
+  if (["slogin", "mlogin", "wlogin", "reg"].includes(h2)) scr = h2;
+}
+const _doS = doS, _doM = doM, _doW = doW;
+doS = (ev) => __async(null, null, function* () {
+  try {
+    yield _doS(ev);
+  } catch (e) {
+    toast("Login problem: " + e.message);
+  }
+});
+doM = (ev) => __async(null, null, function* () {
+  try {
+    yield _doM(ev);
+  } catch (e) {
+    toast("Login problem: " + e.message);
+  }
+});
+doW = (ev) => __async(null, null, function* () {
+  try {
+    yield _doW(ev);
+  } catch (e) {
+    toast("Login problem: " + e.message);
+  }
+});
+init();
+</script>
+</body>
+</html>
